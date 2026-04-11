@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Float Radar</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-inner">
+      <p class="eyebrow">River conditions made simple</p>
+      <h1>Float Radar</h1>
+      <p class="hero-text">
+        Check live river levels and get a quick read on which floats may be too low,
+        good to go, or too high.
+      </p>
+    </div>
+  </header>
+
+
+  <main class="container">
+    <section class="top-panel">
+      <div>
+        <h2>Today’s snapshot</h2>
+        <p class="subtext">
+          Live USGS readings for a few starter rivers. This is the beginning of the real app.
+        </p>
+      </div>
+
+
+      <div class="top-panel-actions">
+        <button id="refreshBtn" type="button">Refresh</button>
+        <p id="lastUpdated" class="last-updated">Loading data...</p>
+      </div>
+    </section>
+
+
+    <section id="messageBox" class="message-box hidden"></section>
+
+
+    <section id="riverGrid" class="river-grid"></section>
+  </main>
+
+
+  <template id="riverCardTemplate">
+    <article class="river-card">
+      <div class="card-header">
+        <div>
+          <p class="river-label">River</p>
+          <h3 class="river-name"></h3>
+          <p class="river-section"></p>
+        </div>
+        <span class="status-badge">Unknown</span>
+      </div>
+
+
+      <div class="reading reading-main">
+        <span class="reading-label">Gauge height</span>
+        <span class="reading-value gauge-height">--</span>
+      </div>
+
+
+      <div class="reading-grid">
+        <div class="reading">
+          <span class="reading-label">Flow</span>
+          <span class="reading-value discharge">--</span>
+        </div>
+        <div class="reading">
+          <span class="reading-label">Water temp</span>
+          <span class="reading-value temp">--</span>
+        </div>
+      </div>
+
+
+      <div class="target-range">
+        <span class="target-title">Starter range</span>
+        <p class="range-text"></p>
+      </div>
+
+
+      <p class="notes"></p>
+
+
+      <a class="usgs-link" href="#" target="_blank" rel="noopener noreferrer">
+        Open USGS gauge
+      </a>
+    </article>
+  </template>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
