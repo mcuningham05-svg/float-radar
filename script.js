@@ -1,42 +1,3 @@
-const rivers = [
-  {
-    name: "Buffalo River",
-    section: "Ponca area",
-    site: "07055646",
-    usgsUrl: "https://waterdata.usgs.gov/monitoring-location/07055646/",
-    idealGaugeMin: 3.0,
-    idealGaugeMax: 5.5,
-    notes: "Starter planning range only. This should get more precise by section."
-  },
-  {
-    name: "Mulberry River",
-    section: "Turner Bend area",
-    site: "07194800",
-    usgsUrl: "https://waterdata.usgs.gov/monitoring-location/07194800/",
-    idealGaugeMin: 2.0,
-    idealGaugeMax: 4.5,
-    notes: "This river can rise and fall quickly after rain."
-  },
-  {
-    name: "White River",
-    section: "Starter reference gauge",
-    site: "07048600",
-    usgsUrl: "https://waterdata.usgs.gov/monitoring-location/07048600/",
-    idealGaugeMin: 2.5,
-    idealGaugeMax: 6.0,
-    notes: "Later this should be split into real float sections."
-  },
-  {
-    name: "Elk River",
-    section: "Near Noel",
-    site: "07189000",
-    usgsUrl: "https://waterdata.usgs.gov/monitoring-location/07189000/",
-    idealGaugeMin: 2.5,
-    idealGaugeMax: 5.0,
-    notes: "Good starter gauge, but actual float quality depends on the section."
-  }
-];
-
 const riverGrid = document.getElementById("riverGrid");
 const refreshBtn = document.getElementById("refreshBtn");
 const lastUpdated = document.getElementById("lastUpdated");
@@ -44,7 +5,7 @@ const template = document.getElementById("riverCardTemplate");
 const messageBox = document.getElementById("messageBox");
 const riverCount = document.getElementById("riverCount");
 
-riverCount.textContent = rivers.length;
+let rivers = [];
 
 function formatNumber(value, decimals = 1) {
   if (value === null || value === undefined || Number.isNaN(Number(value))) {
@@ -68,7 +29,7 @@ function getStatus(height, min, max) {
       label: "Too Low",
       className: "status-bad",
       summary: "Low",
-      recommendation: "Probably too low for a smooth float unless you already know this section well."
+      recommendation: "Probably too low for a smooth float unless you know this section well."
     };
   }
 
@@ -99,49 +60,20 @@ function hideMessage() {
   messageBox.classList.add("hidden");
 }
 
-function buildCard(river, readings) {
-  const node = template.content.cloneNode(true);
+async function loadRiverList() {
+  const response = await fetch("rivers.json");
 
-  const riverName = node.querySelector(".river-name");
-  const riverSection = node.querySelector(".river-section");
-  const badge = node.querySelector(".status-badge");
-  const gaugeHeight = node.querySelector(".gauge-height");
-  const discharge = node.querySelector(".discharge");
-  const temp = node.querySelector(".temp");
-  const gaugeSummary = node.querySelector(".gauge-summary");
-  const recommendationText = node.querySelector(".recommendation-text");
-  const rangeText = node.querySelector(".range-text");
-  const notes = node.querySelector(".notes");
-  const usgsLink = node.querySelector(".usgs-link");
-
-  riverName.textContent = river.name;
-  riverSection.textContent = river.section;
-
-  const status = getStatus(readings.gaugeHeight, river.idealGaugeMin, river.idealGaugeMax);
-  badge.textContent = status.label;
-  gaugeSummary.textContent = status.summary;
-  recommendationText.textContent = status.recommendation;
-
-  if (status.className) {
-    badge.classList.add(status.className);
+  if (!response.ok) {
+    throw new Error("Could not load rivers.json");
   }
 
-  gaugeHeight.textContent =
-    readings.gaugeHeight !== null ? `${formatNumber(readings.gaugeHeight, 2)} ft` : "--";
+  const data = await response.json();
 
-  discharge.textContent =
-    readings.discharge !== null ? `${Math.round(readings.discharge)} cfs` : "--";
+  if (!Array.isArray(data)) {
+    throw new Error("rivers.json is not formatted as a list");
+  }
 
-  temp.textContent =
-    readings.temperature !== null ? `${formatNumber(readings.temperature, 1)} °F` : "--";
-
-  rangeText.textContent =
-    `${river.idealGaugeMin.toFixed(1)} ft to ${river.idealGaugeMax.toFixed(1)} ft`;
-
-  notes.textContent = river.notes;
-  usgsLink.href = river.usgsUrl;
-
-  return node;
+  return data;
 }
 
 async function fetchRiverData(siteNumber) {
@@ -185,32 +117,82 @@ async function fetchRiverData(siteNumber) {
   };
 }
 
+function buildCard(river, readings) {
+  const node = template.content.cloneNode(true);
+
+  const riverName = node.querySelector(".river-name");
+  const riverSection = node.querySelector(".river-section");
+  const badge = node.querySelector(".status-badge");
+  const gaugeHeight = node.querySelector(".gauge-height");
+  const discharge = node.querySelector(".discharge");
+  const temp = node.querySelector(".temp");
+  const gaugeSummary = node.querySelector(".gauge-summary");
+  const recommendationText = node.querySelector(".recommendation-text");
+  const rangeText = node.querySelector(".range-text");
+  const notes = node.querySelector(".notes");
+  const usgsLink = node.querySelector(".usgs-link");
+
+  riverName.textContent = river.river;
+  riverSection.textContent = `${river.section} • ${river.region}`;
+
+  const status = getStatus(readings.gaugeHeight, river.idealMin, river.idealMax);
+  badge.textContent = status.label;
+  gaugeSummary.textContent = status.summary;
+  recommendationText.textContent = status.recommendation;
+
+  if (status.className) {
+    badge.classList.add(status.className);
+  }
+
+  gaugeHeight.textContent =
+    readings.gaugeHeight !== null ? `${formatNumber(readings.gaugeHeight, 2)} ft` : "--";
+
+  discharge.textContent =
+    readings.discharge !== null ? `${Math.round(readings.discharge)} cfs` : "--";
+
+  temp.textContent =
+    readings.temperature !== null ? `${formatNumber(readings.temperature, 1)} °F` : "--";
+
+  rangeText.textContent =
+    `${river.idealMin.toFixed(1)} ft to ${river.idealMax.toFixed(1)} ft`;
+
+  notes.textContent = river.notes;
+  usgsLink.href = `https://waterdata.usgs.gov/monitoring-location/${river.site}/`;
+
+  return node;
+}
+
 async function loadRivers() {
   hideMessage();
   riverGrid.innerHTML = "";
   lastUpdated.textContent = "Loading latest conditions...";
 
-  const results = await Promise.all(
-    rivers.map(async (river) => {
-      try {
-        const readings = await fetchRiverData(river.site);
-        return buildCard(river, readings);
-      } catch (error) {
-        return buildCard(river, {
-          gaugeHeight: null,
-          discharge: null,
-          temperature: null
-        });
-      }
-    })
-  );
+  try {
+    if (rivers.length === 0) {
+      rivers = await loadRiverList();
+      riverCount.textContent = rivers.length;
+    }
 
-  results.forEach((card) => riverGrid.appendChild(card));
-  lastUpdated.textContent = `Updated ${new Date().toLocaleString()}`;
+    const results = await Promise.all(
+      rivers.map(async (river) => {
+        try {
+          const readings = await fetchRiverData(river.site);
+          return buildCard(river, readings);
+        } catch (error) {
+          return buildCard(river, {
+            gaugeHeight: null,
+            discharge: null,
+            temperature: null
+          });
+        }
+      })
+    );
 
-  const hasRealData = riverGrid.textContent.includes("ft");
-  if (!hasRealData) {
-    showMessage("The page loaded, but live readings did not come through for one or more gauges.");
+    results.forEach((card) => riverGrid.appendChild(card));
+    lastUpdated.textContent = `Updated ${new Date().toLocaleString()}`;
+  } catch (error) {
+    showMessage("Could not load river data. Check that rivers.json exists and is committed.");
+    lastUpdated.textContent = "Load failed";
   }
 }
 
