@@ -4,6 +4,7 @@ const lastUpdated = document.getElementById("lastUpdated");
 const template = document.getElementById("riverCardTemplate");
 const messageBox = document.getElementById("messageBox");
 const riverCount = document.getElementById("riverCount");
+const topPicks = document.getElementById("topPicks");
 
 let rivers = [];
 
@@ -61,22 +62,15 @@ function weatherCodeToText(code) {
     51: "Light Drizzle",
     53: "Drizzle",
     55: "Heavy Drizzle",
-    56: "Freezing Drizzle",
-    57: "Freezing Drizzle",
     61: "Light Rain",
     63: "Rain",
     65: "Heavy Rain",
-    66: "Freezing Rain",
-    67: "Freezing Rain",
     71: "Light Snow",
     73: "Snow",
     75: "Heavy Snow",
-    77: "Snow Grains",
     80: "Showers",
     81: "Showers",
     82: "Heavy Showers",
-    85: "Snow Showers",
-    86: "Snow Showers",
     95: "Thunderstorm",
     96: "Storm / Hail",
     99: "Storm / Hail"
@@ -140,18 +134,64 @@ function getTrendInfo(values) {
   };
 }
 
+function getDecisionScore(readings, weather, trendValues, river) {
+  let score = 0;
+
+  if (readings.gaugeHeight !== null) {
+    if (readings.gaugeHeight >= river.idealMin && readings.gaugeHeight <= river.idealMax) {
+      score += 50;
+    } else if (readings.gaugeHeight < river.idealMin) {
+      score += 10;
+    } else {
+      score += 20;
+    }
+  }
+
+  if (weather) {
+    if (weather.currentTemp !== null && weather.currentTemp >= 68) score += 10;
+    if (weather.windSpeed !== null && weather.windSpeed <= 12) score += 10;
+
+    const rainyCodes = [61, 63, 65, 80, 81, 82, 95, 96, 99];
+    if (rainyCodes.includes(weather.weatherCode)) score -= 8;
+  }
+
+  const trend = getTrendInfo(trendValues || []);
+  if (trend.label === "Stable") score += 10;
+  if (trend.label === "Rising") score += 5;
+  if (trend.label === "Falling") score += 3;
+
+  if (score >= 65) return { label: "Best Bet", className: "status-good", score };
+  if (score >= 45) return { label: "Good Option", className: "status-good", score };
+  if (score >= 25) return { label: "Maybe", className: "status-warning", score };
+  return { label: "Skip", className: "status-bad", score };
+}
+
+function renderTopPicks(items) {
+  if (!topPicks) return;
+
+  topPicks.innerHTML = "";
+
+  const best = [...items]
+    .sort((a, b) => b.decision.score - a.decision.score)
+    .slice(0, 3);
+
+  best.forEach((item) => {
+    const div = document.createElement("div");
+    div.className = "stat-box";
+    div.innerHTML = `
+      <span class="stat-label">${item.decision.label}</span>
+      <span class="stat-value">${item.river.river} — ${item.river.section}</span>
+    `;
+    topPicks.appendChild(div);
+  });
+}
+
 async function loadRiverList() {
   const response = await fetch("rivers.json");
-
-  if (!response.ok) {
-    throw new Error("Could not load rivers.json");
-  }
+  if (!response.ok) throw new Error("Could not load rivers.json");
 
   const data = await response.json();
-
-  if (!Array.isArray(data)) {
-    throw new Error("rivers.json is not formatted as a list");
-  }
+  if (!Array.isArray(data)) throw new Error("rivers.json is not formatted as a list");
 
   return data;
 }
@@ -162,10 +202,7 @@ async function fetchRiverData(siteNumber) {
     `&parameterCd=00065,00060,00010&siteStatus=all`;
 
   const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error(`Request failed for site ${siteNumber}`);
-  }
+  if (!response.ok) throw new Error(`Request failed for site ${siteNumber}`);
 
   const data = await response.json();
   const series = data?.value?.timeSeries || [];
@@ -179,7 +216,6 @@ async function fetchRiverData(siteNumber) {
     const latest = item?.values?.[0]?.value?.[0]?.value;
 
     if (latest === undefined) continue;
-
     const numericValue = Number(latest);
 
     if (paramCode === "00065") gaugeHeight = numericValue;
@@ -187,13 +223,10 @@ async function fetchRiverData(siteNumber) {
     if (paramCode === "00010") temperatureC = numericValue;
   }
 
-  const temperatureF =
-    temperatureC !== null ? (temperatureC * 9) / 5 + 32 : null;
-
   return {
     gaugeHeight,
     discharge,
-    temperature: temperatureF
+    temperature: temperatureC !== null ? (temperatureC * 9) / 5 + 32 : null
   };
 }
 
@@ -210,37 +243,25 @@ async function fetchRiverTrend(siteNumber) {
     `&startDT=${startDT}&endDT=${endDT}&parameterCd=00065&siteStatus=all`;
 
   const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error(`Trend request failed for site ${siteNumber}`);
-  }
+  if (!response.ok) throw new Error(`Trend request failed for site ${siteNumber}`);
 
   const data = await response.json();
   const series = data?.value?.timeSeries || [];
-
-  if (!series.length) {
-    return [];
-  }
+  if (!series.length) return [];
 
   const values = series[0]?.values?.[0]?.value || [];
-
-  return values
-    .map((entry) => Number(entry.value))
-    .filter((value) => !Number.isNaN(value));
+  return values.map((entry) => Number(entry.value)).filter((value) => !Number.isNaN(value));
 }
 
 async function fetchWeather(lat, lon) {
   const url =
-    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+    `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}` +
     `&current=temperature_2m,weather_code,wind_speed_10m` +
     `&daily=temperature_2m_max,weather_code,time` +
     `&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=7`;
 
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error("Weather request failed");
-  }
+  const response = await fetch(url, { method: "GET" });
+  if (!response.ok) throw new Error(`Weather request failed with status ${response.status}`);
 
   const data = await response.json();
 
@@ -249,7 +270,6 @@ async function fetchWeather(lat, lon) {
     windSpeed: data?.current?.wind_speed_10m ?? null,
     weatherCode: data?.current?.weather_code ?? null,
     dailyTemps: data?.daily?.temperature_2m_max || [],
-    dailyCodes: data?.daily?.weather_code || [],
     dailyTimes: data?.daily?.time || []
   };
 }
@@ -260,21 +280,20 @@ function buildWeatherStrip(container, times, temps) {
   for (let i = 0; i < 7; i++) {
     const item = document.createElement("span");
     const day = times[i] ? formatShortDay(times[i]) : "--";
-    const temp = temps[i] !== undefined && temps[i] !== null
-      ? `${Math.round(temps[i])}°`
-      : "--";
-
+    const temp = temps[i] !== undefined && temps[i] !== null ? `${Math.round(temps[i])}°` : "--";
     item.textContent = `${day} ${temp}`;
     container.appendChild(item);
   }
 }
 
-function buildCard(river, readings, weather, trendValues) {
+function buildCard(item) {
+  const { river, readings, weather, trendValues, decision } = item;
   const node = template.content.cloneNode(true);
 
   const riverName = node.querySelector(".river-name");
   const riverSection = node.querySelector(".river-section");
   const badge = node.querySelector(".status-badge");
+  const decisionBadge = node.querySelector(".decision-badge");
   const gaugeHeight = node.querySelector(".gauge-height");
   const discharge = node.querySelector(".discharge");
   const temp = node.querySelector(".temp");
@@ -296,32 +315,24 @@ function buildCard(river, readings, weather, trendValues) {
   gaugeSummary.textContent = status.summary;
   recommendationText.textContent = status.recommendation;
 
+  decisionBadge.textContent = decision.label;
+  if (decision.className) decisionBadge.classList.add(decision.className);
+
   if (status.className) {
     badge.classList.add(status.className);
   }
 
-  gaugeHeight.textContent =
-    readings.gaugeHeight !== null ? `${formatNumber(readings.gaugeHeight, 2)} ft` : "--";
-
-  discharge.textContent =
-    readings.discharge !== null ? `${Math.round(readings.discharge)} cfs` : "--";
-
-  temp.textContent =
-    readings.temperature !== null ? `${formatNumber(readings.temperature, 1)} °F` : "--";
-
-  rangeText.textContent =
-    `${river.idealMin.toFixed(1)} ft to ${river.idealMax.toFixed(1)} ft`;
-
+  gaugeHeight.textContent = readings.gaugeHeight !== null ? `${formatNumber(readings.gaugeHeight, 2)} ft` : "--";
+  discharge.textContent = readings.discharge !== null ? `${Math.round(readings.discharge)} cfs` : "--";
+  temp.textContent = readings.temperature !== null ? `${formatNumber(readings.temperature, 1)} °F` : "--";
+  rangeText.textContent = `${river.idealMin.toFixed(1)} ft to ${river.idealMax.toFixed(1)} ft`;
   notes.textContent = river.notes;
   usgsLink.href = `https://waterdata.usgs.gov/monitoring-location/${river.site}/`;
 
   if (weather) {
     const weatherText = weatherCodeToText(weather.weatherCode);
-    const currentTempText =
-      weather.currentTemp !== null ? `${Math.round(weather.currentTemp)}°F` : "--";
-
-    const windText =
-      weather.windSpeed !== null ? `${Math.round(weather.windSpeed)} mph wind` : "wind unavailable";
+    const currentTempText = weather.currentTemp !== null ? `${Math.round(weather.currentTemp)}°F` : "--";
+    const windText = weather.windSpeed !== null ? `${Math.round(weather.windSpeed)} mph wind` : "wind unavailable";
 
     weatherCurrent.textContent = `${currentTempText} • ${weatherText}`;
     weatherSummary.textContent = windText;
@@ -341,6 +352,7 @@ function buildCard(river, readings, weather, trendValues) {
 async function loadRivers() {
   hideMessage();
   riverGrid.innerHTML = "";
+  if (topPicks) topPicks.innerHTML = "";
   lastUpdated.textContent = "Loading latest conditions...";
 
   try {
@@ -349,35 +361,32 @@ async function loadRivers() {
       riverCount.textContent = rivers.length;
     }
 
-    const results = await Promise.all(
+    const items = await Promise.all(
       rivers.map(async (river) => {
-        let readings = {
-          gaugeHeight: null,
-          discharge: null,
-          temperature: null
-        };
-
+        let readings = { gaugeHeight: null, discharge: null, temperature: null };
         let weather = null;
         let trendValues = [];
 
-        try {
-          readings = await fetchRiverData(river.site);
-        } catch (error) {}
+        try { readings = await fetchRiverData(river.site); } catch {}
+        try { weather = await fetchWeather(river.lat, river.lon); } catch {}
+        try { trendValues = await fetchRiverTrend(river.site); } catch {}
 
-        try {
-          weather = await fetchWeather(river.lat, river.lon);
-        } catch (error) {}
-
-        try {
-          trendValues = await fetchRiverTrend(river.site);
-        } catch (error) {}
-
-        return buildCard(river, readings, weather, trendValues);
+        const decision = getDecisionScore(readings, weather, trendValues, river);
+        return { river, readings, weather, trendValues, decision };
       })
     );
 
-    results.forEach((card) => riverGrid.appendChild(card));
+    items
+      .sort((a, b) => b.decision.score - a.decision.score)
+      .forEach((item) => riverGrid.appendChild(buildCard(item)));
+
+    renderTopPicks(items);
     lastUpdated.textContent = `Updated ${new Date().toLocaleString()}`;
+
+    const weatherFailedForAll = items.every((item) => item.weather === null);
+    if (weatherFailedForAll) {
+      showMessage("River data loaded, but weather did not. This is likely a weather API or deployment-cache issue, not your river setup.");
+    }
   } catch (error) {
     showMessage("Could not load river data. Check that rivers.json exists and is committed.");
     lastUpdated.textContent = "Load failed";
