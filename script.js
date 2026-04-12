@@ -80,11 +80,13 @@ function weatherCodeToText(code) {
 }
 
 function showMessage(text) {
+  if (!messageBox) return;
   messageBox.textContent = text;
   messageBox.classList.remove("hidden");
 }
 
 function hideMessage() {
+  if (!messageBox) return;
   messageBox.textContent = "";
   messageBox.classList.add("hidden");
 }
@@ -188,10 +190,14 @@ function renderTopPicks(items) {
 
 async function loadRiverList() {
   const response = await fetch("rivers.json");
-  if (!response.ok) throw new Error("Could not load rivers.json");
+  if (!response.ok) {
+    throw new Error("Could not load rivers.json");
+  }
 
   const data = await response.json();
-  if (!Array.isArray(data)) throw new Error("rivers.json is not formatted as a list");
+  if (!Array.isArray(data)) {
+    throw new Error("rivers.json is not formatted as a list");
+  }
 
   return data;
 }
@@ -202,7 +208,9 @@ async function fetchRiverData(siteNumber) {
     `&parameterCd=00065,00060,00010&siteStatus=all`;
 
   const response = await fetch(url);
-  if (!response.ok) throw new Error(`Request failed for site ${siteNumber}`);
+  if (!response.ok) {
+    throw new Error(`Request failed for site ${siteNumber}`);
+  }
 
   const data = await response.json();
   const series = data?.value?.timeSeries || [];
@@ -243,7 +251,9 @@ async function fetchRiverTrend(siteNumber) {
     `&startDT=${startDT}&endDT=${endDT}&parameterCd=00065&siteStatus=all`;
 
   const response = await fetch(url);
-  if (!response.ok) throw new Error(`Trend request failed for site ${siteNumber}`);
+  if (!response.ok) {
+    return [];
+  }
 
   const data = await response.json();
   const series = data?.value?.timeSeries || [];
@@ -257,11 +267,13 @@ async function fetchWeather(lat, lon) {
   const url =
     `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}` +
     `&current=temperature_2m,weather_code,wind_speed_10m` +
-    `&daily=temperature_2m_max,weather_code,time` +
+    `&daily=temperature_2m_max,time` +
     `&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=7`;
 
-  const response = await fetch(url, { method: "GET" });
-  if (!response.ok) throw new Error(`Weather request failed with status ${response.status}`);
+  const response = await fetch(url);
+  if (!response.ok) {
+    return null;
+  }
 
   const data = await response.json();
 
@@ -275,6 +287,8 @@ async function fetchWeather(lat, lon) {
 }
 
 function buildWeatherStrip(container, times, temps) {
+  if (!container) return;
+
   container.innerHTML = "";
 
   for (let i = 0; i < 7; i++) {
@@ -315,8 +329,10 @@ function buildCard(item) {
   gaugeSummary.textContent = status.summary;
   recommendationText.textContent = status.recommendation;
 
-  decisionBadge.textContent = decision.label;
-  if (decision.className) decisionBadge.classList.add(decision.className);
+  if (decisionBadge) {
+    decisionBadge.textContent = decision.label;
+    if (decision.className) decisionBadge.classList.add(decision.className);
+  }
 
   if (status.className) {
     badge.classList.add(status.className);
@@ -334,31 +350,33 @@ function buildCard(item) {
     const currentTempText = weather.currentTemp !== null ? `${Math.round(weather.currentTemp)}°F` : "--";
     const windText = weather.windSpeed !== null ? `${Math.round(weather.windSpeed)} mph wind` : "wind unavailable";
 
-    weatherCurrent.textContent = `${currentTempText} • ${weatherText}`;
-    weatherSummary.textContent = windText;
+    if (weatherCurrent) weatherCurrent.textContent = `${currentTempText} • ${weatherText}`;
+    if (weatherSummary) weatherSummary.textContent = windText;
     buildWeatherStrip(weatherStrip, weather.dailyTimes, weather.dailyTemps);
   } else {
-    weatherCurrent.textContent = "Weather unavailable";
-    weatherSummary.textContent = "No forecast";
+    if (weatherCurrent) weatherCurrent.textContent = "Weather unavailable";
+    if (weatherSummary) weatherSummary.textContent = "No forecast";
     buildWeatherStrip(weatherStrip, [], []);
   }
 
   const trend = getTrendInfo(trendValues || []);
-  trendText.textContent = `${trend.arrow} ${trend.label} • ${trend.changeText}`;
+  if (trendText) {
+    trendText.textContent = `${trend.arrow} ${trend.label} • ${trend.changeText}`;
+  }
 
   return node;
 }
 
 async function loadRivers() {
   hideMessage();
-  riverGrid.innerHTML = "";
+  if (riverGrid) riverGrid.innerHTML = "";
   if (topPicks) topPicks.innerHTML = "";
-  lastUpdated.textContent = "Loading latest conditions...";
+  if (lastUpdated) lastUpdated.textContent = "Loading latest conditions...";
 
   try {
     if (rivers.length === 0) {
       rivers = await loadRiverList();
-      riverCount.textContent = rivers.length;
+      if (riverCount) riverCount.textContent = rivers.length;
     }
 
     const items = await Promise.all(
@@ -367,9 +385,17 @@ async function loadRivers() {
         let weather = null;
         let trendValues = [];
 
-        try { readings = await fetchRiverData(river.site); } catch {}
-        try { weather = await fetchWeather(river.lat, river.lon); } catch {}
-        try { trendValues = await fetchRiverTrend(river.site); } catch {}
+        try {
+          readings = await fetchRiverData(river.site);
+        } catch {}
+
+        try {
+          weather = await fetchWeather(river.lat, river.lon);
+        } catch {}
+
+        try {
+          trendValues = await fetchRiverTrend(river.site);
+        } catch {}
 
         const decision = getDecisionScore(readings, weather, trendValues, river);
         return { river, readings, weather, trendValues, decision };
@@ -378,20 +404,29 @@ async function loadRivers() {
 
     items
       .sort((a, b) => b.decision.score - a.decision.score)
-      .forEach((item) => riverGrid.appendChild(buildCard(item)));
+      .forEach((item) => {
+        if (riverGrid) riverGrid.appendChild(buildCard(item));
+      });
 
     renderTopPicks(items);
-    lastUpdated.textContent = `Updated ${new Date().toLocaleString()}`;
+
+    if (lastUpdated) {
+      lastUpdated.textContent = `Updated ${new Date().toLocaleString()}`;
+    }
 
     const weatherFailedForAll = items.every((item) => item.weather === null);
     if (weatherFailedForAll) {
-      showMessage("River data loaded, but weather did not. This is likely a weather API or deployment-cache issue, not your river setup.");
+      showMessage("River data loaded, but weather did not. The weather source may be blocked or temporarily failing.");
     }
   } catch (error) {
-    showMessage("Could not load river data. Check that rivers.json exists and is committed.");
-    lastUpdated.textContent = "Load failed";
+    console.error(error);
+    showMessage("The page loaded, but script logic failed after loading the river list.");
+    if (lastUpdated) lastUpdated.textContent = "Load failed";
   }
 }
 
-refreshBtn.addEventListener("click", loadRivers);
+if (refreshBtn) {
+  refreshBtn.addEventListener("click", loadRivers);
+}
+
 loadRivers();
