@@ -1,52 +1,52 @@
 [
   {
     "name": "Buffalo River",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Buffalo_National_River_Ponca.jpg",
-    "credit": "National Park Service (Public Domain)"
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Buffalo_National_River.jpg/800px-Buffalo_National_River.jpg",
+    "credit": "Public Domain"
   },
   {
     "name": "Mulberry River",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Mulberry_River_Arkansas.jpg",
-    "credit": "Wikimedia Commons (CC BY-SA)"
+    "image": null,
+    "credit": null
   },
   {
     "name": "Kings River",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Kings_River_Arkansas.jpg",
-    "credit": "Wikimedia Commons (CC BY-SA)"
+    "image": null,
+    "credit": null
   },
   {
     "name": "White River",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/3/3f/White_River_Arkansas.jpg",
-    "credit": "Wikimedia Commons (CC BY-SA)"
+    "image": null,
+    "credit": null
   },
   {
     "name": "Elk River",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Elk_River_Oklahoma_Arkansas.jpg",
-    "credit": "Wikimedia Commons (CC BY-SA)"
+    "image": null,
+    "credit": null
   },
   {
     "name": "Caddo River",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Caddo_River_Arkansas.jpg",
-    "credit": "Wikimedia Commons (CC BY-SA)"
+    "image": null,
+    "credit": null
   },
   {
     "name": "Little Missouri River",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Little_Missouri_River_Arkansas.jpg",
-    "credit": "Wikimedia Commons (CC BY-SA)"
+    "image": null,
+    "credit": null
   },
   {
     "name": "Spring River",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Spring_River_Hardy_Arkansas.jpg",
-    "credit": "Likely Public Domain (historic image via Wikimedia)"
+    "image": null,
+    "credit": null
   },
   {
     "name": "Strawberry River",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Strawberry_River_Arkansas.jpg",
-    "credit": "Wikimedia Commons (CC BY-SA)"
+    "image": null,
+    "credit": null
   },
   {
     "name": "Cadron Creek",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/5/50/Cadron_Creek_Arkansas.jpg",
-    "credit": "Wikimedia Commons (CC BY-SA)"
+    "image": null,
+    "credit": null
   }
 ]
