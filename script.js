@@ -58,6 +58,7 @@ function getStatus(height, min, max) {
     return {
       label: "No data",
       className: "",
+      summary: "Unavailable",
       recommendation: "Live reading unavailable right now."
     };
   }
@@ -66,7 +67,8 @@ function getStatus(height, min, max) {
     return {
       label: "Too Low",
       className: "status-bad",
-      recommendation: "Probably too low for a good float unless you know this section well."
+      summary: "Low",
+      recommendation: "Probably too low for a smooth float unless you already know this section well."
     };
   }
 
@@ -74,14 +76,16 @@ function getStatus(height, min, max) {
     return {
       label: "High",
       className: "status-warning",
-      recommendation: "Running high. This may be pushy or less ideal depending on skill level."
+      summary: "High",
+      recommendation: "Running high. This may feel pushy or less forgiving depending on experience."
     };
   }
 
   return {
     label: "Good",
     className: "status-good",
-    recommendation: "Looks like a solid day to float based on this starter range."
+    summary: "Runnable",
+    recommendation: "Looks like a solid float day based on this starter range."
   };
 }
 
@@ -104,6 +108,7 @@ function buildCard(river, readings) {
   const gaugeHeight = node.querySelector(".gauge-height");
   const discharge = node.querySelector(".discharge");
   const temp = node.querySelector(".temp");
+  const gaugeSummary = node.querySelector(".gauge-summary");
   const recommendationText = node.querySelector(".recommendation-text");
   const rangeText = node.querySelector(".range-text");
   const notes = node.querySelector(".notes");
@@ -114,6 +119,7 @@ function buildCard(river, readings) {
 
   const status = getStatus(readings.gaugeHeight, river.idealGaugeMin, river.idealGaugeMax);
   badge.textContent = status.label;
+  gaugeSummary.textContent = status.summary;
   recommendationText.textContent = status.recommendation;
 
   if (status.className) {
