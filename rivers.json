@@ -1,15 +1,60 @@
 [
   {
     "river": "Buffalo River",
-    "section": "Ponca",
+    "section": "Ponca to Kyle’s Landing",
     "site": "07055646",
     "lat": 36.087,
     "lon": -93.368,
     "idealMin": 3.0,
     "idealMax": 5.5,
-    "region": "North Arkansas",
-    "notes": "Starter planning range for the Ponca area."
+    "region": "Upper Buffalo",
+    "notes": "Very popular float. Needs water. Below ~3 ft gets scrapey fast."
   },
+  {
+    "river": "Buffalo River",
+    "section": "Kyle’s Landing to Pruitt",
+    "site": "07055646",
+    "lat": 36.020,
+    "lon": -93.270,
+    "idealMin": 2.8,
+    "idealMax": 5.5,
+    "region": "Upper Buffalo",
+    "notes": "Slightly more forgiving than Ponca. Still needs decent water."
+  },
+  {
+    "river": "Buffalo River",
+    "section": "Pruitt to Hasty",
+    "site": "07056000",
+    "lat": 35.980,
+    "lon": -93.186,
+    "idealMin": 2.5,
+    "idealMax": 5.5,
+    "region": "Middle Buffalo",
+    "notes": "Good intermediate stretch. Holds water better than upper sections."
+  },
+  {
+    "river": "Buffalo River",
+    "section": "Tyler Bend / Gilbert",
+    "site": "07056515",
+    "lat": 35.967,
+    "lon": -92.745,
+    "idealMin": 2.5,
+    "idealMax": 6.0,
+    "region": "Middle Buffalo",
+    "notes": "More consistent float section. Popular with outfitters."
+  },
+  {
+    "river": "Buffalo River",
+    "section": "Lower Buffalo (Rush area)",
+    "site": "07056700",
+    "lat": 36.042,
+    "lon": -92.555,
+    "idealMin": 3.0,
+    "idealMax": 7.0,
+    "region": "Lower Buffalo",
+    "notes": "Wider river. Handles higher water but gets pushy."
+  },
+
   {
     "river": "Mulberry River",
     "section": "Turner Bend",
@@ -19,8 +64,43 @@
     "idealMin": 2.0,
     "idealMax": 4.5,
     "region": "Ozarks",
-    "notes": "Can rise and fall quickly after rain."
+    "notes": "Classic Mulberry float. Rain-dependent river."
   },
+  {
+    "river": "Mulberry River",
+    "section": "Cass to Turner Bend",
+    "site": "07195000",
+    "lat": 35.698,
+    "lon": -93.944,
+    "idealMin": 2.0,
+    "idealMax": 4.5,
+    "region": "Ozarks",
+    "notes": "Upper stretch. More technical when water is up."
+  },
+
+  {
+    "river": "Kings River",
+    "section": "Trigger Gap",
+    "site": "07050500",
+    "lat": 36.233,
+    "lon": -93.742,
+    "idealMin": 2.0,
+    "idealMax": 4.5,
+    "region": "Northwest Arkansas",
+    "notes": "Popular float. Clear water river."
+  },
+  {
+    "river": "Kings River",
+    "section": "Rockhouse",
+    "site": "07050500",
+    "lat": 36.151,
+    "lon": -93.700,
+    "idealMin": 2.0,
+    "idealMax": 4.5,
+    "region": "Northwest Arkansas",
+    "notes": "Shares gauge with upper river. Section varies."
+  },
+
   {
     "river": "White River",
     "section": "Reference Gauge",
@@ -30,8 +110,9 @@
     "idealMin": 2.5,
     "idealMax": 6.0,
     "region": "North Arkansas",
-    "notes": "Starter reference only. This should later be split into real float sections."
+    "notes": "Highly dam-controlled. Conditions vary by release schedule."
   },
+
   {
     "river": "Elk River",
     "section": "Noel",
@@ -41,6 +122,77 @@
     "idealMin": 2.5,
     "idealMax": 5.0,
     "region": "Missouri Border",
-    "notes": "Good starter gauge, but float quality depends on section."
+    "notes": "Popular float. Can get crowded."
+  },
+
+  {
+    "river": "Caddo River",
+    "section": "Norman",
+    "site": "07359610",
+    "lat": 34.455,
+    "lon": -93.681,
+    "idealMin": 2.5,
+    "idealMax": 5.0,
+    "region": "Ouachitas",
+    "notes": "Fun scenic river. Rain dependent."
+  },
+  {
+    "river": "Caddo River",
+    "section": "Glenwood",
+    "site": "07359650",
+    "lat": 34.326,
+    "lon": -93.550,
+    "idealMin": 2.5,
+    "idealMax": 5.0,
+    "region": "Ouachitas",
+    "notes": "More stable section. Popular access."
+  },
+
+  {
+    "river": "Little Missouri River",
+    "section": "Langley",
+    "site": "07360200",
+    "lat": 34.312,
+    "lon": -93.853,
+    "idealMin": 2.0,
+    "idealMax": 4.5,
+    "region": "Ouachitas",
+    "notes": "Cold water release below dam. Scenic float."
+  },
+
+  {
+    "river": "Spring River",
+    "section": "Mammoth Spring",
+    "site": "07069500",
+    "lat": 36.495,
+    "lon": -91.542,
+    "idealMin": 350,
+    "idealMax": 900,
+    "region": "North Arkansas",
+    "notes": "Flow-based river. Consistent cold water."
+  },
+
+  {
+    "river": "Strawberry River",
+    "section": "Saddle",
+    "site": "07074000",
+    "lat": 36.086,
+    "lon": -91.608,
+    "idealMin": 2.0,
+    "idealMax": 5.0,
+    "region": "North Arkansas",
+    "notes": "Underrated float. Rain dependent."
+  },
+
+  {
+    "river": "Cadron Creek",
+    "section": "Conway Area",
+    "site": "07261000",
+    "lat": 35.090,
+    "lon": -92.442,
+    "idealMin": 2.0,
+    "idealMax": 4.5,
+    "region": "Central Arkansas",
+    "notes": "Quick-hit float after rain."
   }
 ]
