@@ -8,50 +8,81 @@
 </head>
 <body>
   <header class="hero">
-    <div class="hero-overlay"></div>
-    <div class="hero-inner">
-      <p class="eyebrow">Arkansas River Conditions</p>
-      <h1>Float Radar</h1>
-      <p class="hero-text">
-        Live river levels in a cleaner format so you can decide where to float without digging through gauge pages.
-      </p>
+    <div class="hero-layer hero-layer-1"></div>
+    <div class="hero-layer hero-layer-2"></div>
 
-      <div class="hero-bar">
-        <button id="refreshBtn" type="button">Refresh Data</button>
-        <span id="lastUpdated">Loading latest conditions...</span>
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">Live River Conditions</p>
+        <h1>Float Radar</h1>
+        <p class="hero-text">
+          Fast river checks for people who just want to know where conditions look low,
+          runnable, or high without digging through raw gauge data.
+        </p>
+
+        <div class="hero-actions">
+          <button id="refreshBtn" type="button">Refresh Data</button>
+          <p id="lastUpdated" class="last-updated">Loading latest conditions...</p>
+        </div>
+      </div>
+
+      <div class="hero-panel">
+        <p class="hero-panel-label">Today’s build</p>
+        <div class="hero-panel-grid">
+          <div class="hero-metric">
+            <span class="hero-metric-label">Rivers</span>
+            <span class="hero-metric-value" id="riverCount">4</span>
+          </div>
+          <div class="hero-metric">
+            <span class="hero-metric-label">Data</span>
+            <span class="hero-metric-value">USGS</span>
+          </div>
+          <div class="hero-metric">
+            <span class="hero-metric-label">Status</span>
+            <span class="hero-metric-value">Live</span>
+          </div>
+        </div>
       </div>
     </div>
   </header>
 
   <main class="container">
-    <section class="intro-card">
-      <div>
-        <p class="section-label">Today</p>
-        <h2>Quick river snapshot</h2>
-        <p class="intro-text">
-          This is the first live build of Float Radar. It checks real gauge data and gives a simple read on which rivers look low, good, or high.
+    <section class="overview">
+      <div class="overview-card">
+        <p class="section-kicker">Snapshot</p>
+        <h2>Current float read</h2>
+        <p class="overview-text">
+          This is the first real version of Float Radar: live conditions, cleaner decisions,
+          and a better starting point for building river-specific intelligence.
         </p>
       </div>
-      <div class="intro-stats">
-        <div class="stat-box">
-          <span class="stat-label">Rivers</span>
-          <span class="stat-value" id="riverCount">4</span>
-        </div>
-        <div class="stat-box">
-          <span class="stat-label">Source</span>
-          <span class="stat-value">USGS</span>
-        </div>
+
+      <div class="overview-card overview-card-small">
+        <p class="section-kicker">Goal</p>
+        <h3>Make river data feel usable</h3>
+        <p class="overview-text">
+          Simple enough for beginners. Useful enough to become a real trip-planning tool.
+        </p>
       </div>
     </section>
 
     <section id="messageBox" class="message-box hidden"></section>
+
+    <section class="section-header">
+      <div>
+        <p class="section-kicker">Conditions</p>
+        <h2>River dashboard</h2>
+      </div>
+    </section>
 
     <section id="riverGrid" class="river-grid"></section>
   </main>
 
   <template id="riverCardTemplate">
     <article class="river-card">
-      <div class="card-top">
+      <div class="card-topline"></div>
+
+      <div class="card-header">
         <div>
           <p class="card-kicker">River</p>
           <h3 class="river-name"></h3>
@@ -60,24 +91,30 @@
         <span class="status-badge">Unknown</span>
       </div>
 
-      <div class="level-panel">
-        <p class="level-label">Current gauge</p>
-        <p class="gauge-height">--</p>
-      </div>
-
-      <div class="mini-grid">
-        <div class="mini-box">
-          <span class="mini-label">Flow</span>
-          <span class="discharge">--</span>
+      <div class="gauge-panel">
+        <div>
+          <p class="gauge-label">Current gauge</p>
+          <p class="gauge-height">--</p>
         </div>
-        <div class="mini-box">
-          <span class="mini-label">Water Temp</span>
-          <span class="temp">--</span>
+        <div class="gauge-side">
+          <span class="gauge-side-label">Float read</span>
+          <span class="gauge-summary">Checking</span>
         </div>
       </div>
 
-      <div class="recommendation">
-        <span class="recommendation-label">Float read</span>
+      <div class="stat-grid">
+        <div class="stat-box">
+          <span class="stat-label">Flow</span>
+          <span class="discharge stat-value">--</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Water temp</span>
+          <span class="temp stat-value">--</span>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <span class="insight-label">Recommendation</span>
         <p class="recommendation-text"></p>
       </div>
 
@@ -88,7 +125,9 @@
 
       <p class="notes"></p>
 
-      <a class="usgs-link" href="#" target="_blank" rel="noopener noreferrer">Open USGS gauge</a>
+      <div class="card-footer">
+        <a class="usgs-link" href="#" target="_blank" rel="noopener noreferrer">Open USGS gauge</a>
+      </div>
     </article>
   </template>
 
