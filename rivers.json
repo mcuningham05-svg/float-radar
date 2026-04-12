@@ -1,0 +1,46 @@
+[
+  {
+    "river": "Buffalo River",
+    "section": "Ponca",
+    "site": "07055646",
+    "lat": 36.087,
+    "lon": -93.368,
+    "idealMin": 3.0,
+    "idealMax": 5.5,
+    "region": "North Arkansas",
+    "notes": "Starter planning range for the Ponca area."
+  },
+  {
+    "river": "Mulberry River",
+    "section": "Turner Bend",
+    "site": "07194800",
+    "lat": 35.678,
+    "lon": -93.817,
+    "idealMin": 2.0,
+    "idealMax": 4.5,
+    "region": "Ozarks",
+    "notes": "Can rise and fall quickly after rain."
+  },
+  {
+    "river": "White River",
+    "section": "Reference Gauge",
+    "site": "07048600",
+    "lat": 36.082,
+    "lon": -94.171,
+    "idealMin": 2.5,
+    "idealMax": 6.0,
+    "region": "North Arkansas",
+    "notes": "Starter reference only. This should later be split into real float sections."
+  },
+  {
+    "river": "Elk River",
+    "section": "Noel",
+    "site": "07189000",
+    "lat": 36.545,
+    "lon": -94.485,
+    "idealMin": 2.5,
+    "idealMax": 5.0,
+    "region": "Missouri Border",
+    "notes": "Good starter gauge, but float quality depends on section."
+  }
+]
