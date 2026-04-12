@@ -432,6 +432,8 @@ function buildCard(item) {
   const weatherSummary = node.querySelector(".weather-summary");
   const weatherStrip = node.querySelector(".weather-strip");
   const trendText = node.querySelector(".trend-text");
+  const riverImage = node.querySelector(".river-image");
+  const imageWrap = node.querySelector(".card-image-wrap");
 
   riverName.textContent = river.river;
   riverSection.textContent = `${river.section} • ${river.region}`;
@@ -459,6 +461,15 @@ function buildCard(item) {
   rangeText.textContent = `${river.idealMin.toFixed(1)} ft to ${river.idealMax.toFixed(1)} ft`;
   notes.textContent = river.notes;
   usgsLink.href = `https://waterdata.usgs.gov/monitoring-location/${river.site}/`;
+
+  if (riverImage && imageWrap) {
+    if (river.image) {
+      riverImage.src = river.image;
+      riverImage.alt = `${river.river} - ${river.section}`;
+    } else {
+      imageWrap.style.display = "none";
+    }
+  }
 
   if (weather) {
     const currentTempText =
