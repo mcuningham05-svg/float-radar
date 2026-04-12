@@ -1,134 +1,52 @@
 [
   {
-    "river": "Buffalo River",
-    "section": "Ponca to Kyle’s Landing",
-    "site": "07055646",
-    "lat": 36.087,
-    "lon": -93.368,
-    "idealMin": 3.0,
-    "idealMax": 5.5,
-    "region": "Upper Buffalo",
-    "notes": "Very popular float.",
-    "image": "https://www.nps.gov/common/uploads/structured_data/3C7F0D1B-1DD8-B71B-0B5A6C7F8B5D2C6F.jpg"
+    "name": "Buffalo River",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Buffalo_National_River_Ponca.jpg",
+    "credit": "National Park Service (Public Domain)"
   },
   {
-    "river": "Buffalo River",
-    "section": "Kyle’s Landing to Pruitt",
-    "site": "07055646",
-    "lat": 36.02,
-    "lon": -93.27,
-    "idealMin": 2.8,
-    "idealMax": 5.5,
-    "region": "Upper Buffalo",
-    "notes": "Slightly more forgiving.",
-    "image": "https://www.nps.gov/common/uploads/structured_data/3C7F0D1B-1DD8-B71B-0B5A6C7F8B5D2C6F.jpg"
+    "name": "Mulberry River",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Mulberry_River_Arkansas.jpg",
+    "credit": "Wikimedia Commons (CC BY-SA)"
   },
   {
-    "river": "Buffalo River",
-    "section": "Pruitt to Hasty",
-    "site": "07056000",
-    "lat": 35.98,
-    "lon": -93.186,
-    "idealMin": 2.5,
-    "idealMax": 5.5,
-    "region": "Middle Buffalo",
-    "notes": "Good intermediate stretch.",
-    "image": "https://www.nps.gov/common/uploads/structured_data/3C7F0D1B-1DD8-B71B-0B5A6C7F8B5D2C6F.jpg"
+    "name": "Kings River",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Kings_River_Arkansas.jpg",
+    "credit": "Wikimedia Commons (CC BY-SA)"
   },
   {
-    "river": "Buffalo River",
-    "section": "Tyler Bend / Gilbert",
-    "site": "07056515",
-    "lat": 35.967,
-    "lon": -92.745,
-    "idealMin": 2.5,
-    "idealMax": 6.0,
-    "region": "Middle Buffalo",
-    "notes": "Popular with outfitters.",
-    "image": "https://www.nps.gov/common/uploads/structured_data/3C7F0D1B-1DD8-B71B-0B5A6C7F8B5D2C6F.jpg"
+    "name": "White River",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/3/3f/White_River_Arkansas.jpg",
+    "credit": "Wikimedia Commons (CC BY-SA)"
   },
   {
-    "river": "Mulberry River",
-    "section": "Turner Bend",
-    "site": "07194800",
-    "lat": 35.678,
-    "lon": -93.817,
-    "idealMin": 2.0,
-    "idealMax": 4.5,
-    "region": "Ozarks",
-    "notes": "Rain-dependent.",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Mulberry_River_Arkansas.jpg"
+    "name": "Elk River",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Elk_River_Oklahoma_Arkansas.jpg",
+    "credit": "Wikimedia Commons (CC BY-SA)"
   },
   {
-    "river": "Mulberry River",
-    "section": "Cass to Turner Bend",
-    "site": "07195000",
-    "lat": 35.698,
-    "lon": -93.944,
-    "idealMin": 2.0,
-    "idealMax": 4.5,
-    "region": "Ozarks",
-    "notes": "Upper stretch.",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Mulberry_River_Arkansas.jpg"
+    "name": "Caddo River",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Caddo_River_Arkansas.jpg",
+    "credit": "Wikimedia Commons (CC BY-SA)"
   },
   {
-    "river": "Kings River",
-    "section": "Trigger Gap",
-    "site": "07050500",
-    "lat": 36.233,
-    "lon": -93.742,
-    "idealMin": 2.0,
-    "idealMax": 4.5,
-    "region": "Northwest Arkansas",
-    "notes": "Clear water river.",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Kings_River_Arkansas.jpg"
+    "name": "Little Missouri River",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Little_Missouri_River_Arkansas.jpg",
+    "credit": "Wikimedia Commons (CC BY-SA)"
   },
   {
-    "river": "Kings River",
-    "section": "Rockhouse",
-    "site": "07050500",
-    "lat": 36.151,
-    "lon": -93.7,
-    "idealMin": 2.0,
-    "idealMax": 4.5,
-    "region": "Northwest Arkansas",
-    "notes": "Varies by section.",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Kings_River_Arkansas.jpg"
+    "name": "Spring River",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Spring_River_Hardy_Arkansas.jpg",
+    "credit": "Likely Public Domain (historic image via Wikimedia)"
   },
   {
-    "river": "White River",
-    "section": "Reference Gauge",
-    "site": "07048600",
-    "lat": 36.082,
-    "lon": -94.171,
-    "idealMin": 2.5,
-    "idealMax": 6.0,
-    "region": "North Arkansas",
-    "notes": "Dam controlled.",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/5/5f/White_River_Arkansas.jpg"
+    "name": "Strawberry River",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Strawberry_River_Arkansas.jpg",
+    "credit": "Wikimedia Commons (CC BY-SA)"
   },
   {
-    "river": "Elk River",
-    "section": "Noel",
-    "site": "07189000",
-    "lat": 36.545,
-    "lon": -94.485,
-    "idealMin": 2.5,
-    "idealMax": 5.0,
-    "region": "Missouri Border",
-    "notes": "Popular float.",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Elk_River_Missouri.jpg"
-  },
-  {
-    "river": "Caddo River",
-    "section": "Glenwood",
-    "site": "07359650",
-    "lat": 34.326,
-    "lon": -93.55,
-    "idealMin": 2.5,
-    "idealMax": 5.0,
-    "region": "Ouachitas",
-    "notes": "Scenic.",
-    "image": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Caddo_River_Arkansas.jpg"
+    "name": "Cadron Creek",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/5/50/Cadron_Creek_Arkansas.jpg",
+    "credit": "Wikimedia Commons (CC BY-SA)"
   }
 ]
