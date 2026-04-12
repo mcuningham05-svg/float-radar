@@ -8,31 +8,43 @@
     "idealMin": 3.0,
     "idealMax": 5.5,
     "region": "Upper Buffalo",
-    "notes": "Very popular float. Needs water. Below ~3 ft gets scrapey fast.",
+    "notes": "Very popular float.",
     "image": "https://www.nps.gov/common/uploads/structured_data/3C7F0D1B-1DD8-B71B-0B5A6C7F8B5D2C6F.jpg"
   },
   {
     "river": "Buffalo River",
     "section": "Kyle’s Landing to Pruitt",
     "site": "07055646",
-    "lat": 36.020,
-    "lon": -93.270,
+    "lat": 36.02,
+    "lon": -93.27,
     "idealMin": 2.8,
     "idealMax": 5.5,
     "region": "Upper Buffalo",
-    "notes": "Slightly more forgiving than Ponca.",
+    "notes": "Slightly more forgiving.",
     "image": "https://www.nps.gov/common/uploads/structured_data/3C7F0D1B-1DD8-B71B-0B5A6C7F8B5D2C6F.jpg"
   },
   {
     "river": "Buffalo River",
     "section": "Pruitt to Hasty",
     "site": "07056000",
-    "lat": 35.980,
+    "lat": 35.98,
     "lon": -93.186,
     "idealMin": 2.5,
     "idealMax": 5.5,
     "region": "Middle Buffalo",
     "notes": "Good intermediate stretch.",
+    "image": "https://www.nps.gov/common/uploads/structured_data/3C7F0D1B-1DD8-B71B-0B5A6C7F8B5D2C6F.jpg"
+  },
+  {
+    "river": "Buffalo River",
+    "section": "Tyler Bend / Gilbert",
+    "site": "07056515",
+    "lat": 35.967,
+    "lon": -92.745,
+    "idealMin": 2.5,
+    "idealMax": 6.0,
+    "region": "Middle Buffalo",
+    "notes": "Popular with outfitters.",
     "image": "https://www.nps.gov/common/uploads/structured_data/3C7F0D1B-1DD8-B71B-0B5A6C7F8B5D2C6F.jpg"
   },
   {
@@ -44,7 +56,19 @@
     "idealMin": 2.0,
     "idealMax": 4.5,
     "region": "Ozarks",
-    "notes": "Classic Mulberry float.",
+    "notes": "Rain-dependent.",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Mulberry_River_Arkansas.jpg"
+  },
+  {
+    "river": "Mulberry River",
+    "section": "Cass to Turner Bend",
+    "site": "07195000",
+    "lat": 35.698,
+    "lon": -93.944,
+    "idealMin": 2.0,
+    "idealMax": 4.5,
+    "region": "Ozarks",
+    "notes": "Upper stretch.",
     "image": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Mulberry_River_Arkansas.jpg"
   },
   {
@@ -58,6 +82,30 @@
     "region": "Northwest Arkansas",
     "notes": "Clear water river.",
     "image": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Kings_River_Arkansas.jpg"
+  },
+  {
+    "river": "Kings River",
+    "section": "Rockhouse",
+    "site": "07050500",
+    "lat": 36.151,
+    "lon": -93.7,
+    "idealMin": 2.0,
+    "idealMax": 4.5,
+    "region": "Northwest Arkansas",
+    "notes": "Varies by section.",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Kings_River_Arkansas.jpg"
+  },
+  {
+    "river": "White River",
+    "section": "Reference Gauge",
+    "site": "07048600",
+    "lat": 36.082,
+    "lon": -94.171,
+    "idealMin": 2.5,
+    "idealMax": 6.0,
+    "region": "North Arkansas",
+    "notes": "Dam controlled.",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/5/5f/White_River_Arkansas.jpg"
   },
   {
     "river": "Elk River",
@@ -76,11 +124,11 @@
     "section": "Glenwood",
     "site": "07359650",
     "lat": 34.326,
-    "lon": -93.550,
+    "lon": -93.55,
     "idealMin": 2.5,
     "idealMax": 5.0,
     "region": "Ouachitas",
-    "notes": "Scenic float.",
+    "notes": "Scenic.",
     "image": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Caddo_River_Arkansas.jpg"
   }
 ]
