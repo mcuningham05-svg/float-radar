@@ -51,34 +51,6 @@ function getStatus(height, min, max) {
   };
 }
 
-function weatherCodeToText(code) {
-  const map = {
-    0: "Clear",
-    1: "Mostly Clear",
-    2: "Partly Cloudy",
-    3: "Cloudy",
-    45: "Fog",
-    48: "Fog",
-    51: "Light Drizzle",
-    53: "Drizzle",
-    55: "Heavy Drizzle",
-    61: "Light Rain",
-    63: "Rain",
-    65: "Heavy Rain",
-    71: "Light Snow",
-    73: "Snow",
-    75: "Heavy Snow",
-    80: "Showers",
-    81: "Showers",
-    82: "Heavy Showers",
-    95: "Thunderstorm",
-    96: "Storm / Hail",
-    99: "Storm / Hail"
-  };
-
-  return map[code] || "Unknown";
-}
-
 function showMessage(text) {
   if (!messageBox) return;
   messageBox.textContent = text;
@@ -153,8 +125,10 @@ function getDecisionScore(readings, weather, trendValues, river) {
     if (weather.currentTemp !== null && weather.currentTemp >= 68) score += 10;
     if (weather.windSpeed !== null && weather.windSpeed <= 12) score += 10;
 
-    const rainyCodes = [61, 63, 65, 80, 81, 82, 95, 96, 99];
-    if (rainyCodes.includes(weather.weatherCode)) score -= 8;
+    const text = (weather.text || "").toLowerCase();
+    if (text.includes("rain") || text.includes("storm") || text.includes("shower")) {
+      score -= 8;
+    }
   }
 
   const trend = getTrendInfo(trendValues || []);
@@ -168,265 +142,140 @@ function getDecisionScore(readings, weather, trendValues, river) {
   return { label: "Skip", className: "status-bad", score };
 }
 
-function renderTopPicks(items) {
-  if (!topPicks) return;
-
-  topPicks.innerHTML = "";
-
-  const best = [...items]
-    .sort((a, b) => b.decision.score - a.decision.score)
-    .slice(0, 3);
-
-  best.forEach((item) => {
-    const div = document.createElement("div");
-    div.className = "stat-box";
-    div.innerHTML = `
-      <span class="stat-label">${item.decision.label}</span>
-      <span class="stat-value">${item.river.river} — ${item.river.section}</span>
-    `;
-    topPicks.appendChild(div);
-  });
-}
-
 async function loadRiverList() {
-  const response = await fetch("rivers.json");
-  if (!response.ok) {
-    throw new Error("Could not load rivers.json");
-  }
-
-  const data = await response.json();
-  if (!Array.isArray(data)) {
-    throw new Error("rivers.json is not formatted as a list");
-  }
-
+  const res = await fetch("rivers.json");
+  const data = await res.json();
   return data;
 }
 
 async function fetchRiverData(siteNumber) {
-  const url =
-    `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${siteNumber}` +
-    `&parameterCd=00065,00060,00010&siteStatus=all`;
+  const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${siteNumber}&parameterCd=00065,00060,00010`;
 
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Request failed for site ${siteNumber}`);
-  }
+  const res = await fetch(url);
+  const data = await res.json();
 
-  const data = await response.json();
   const series = data?.value?.timeSeries || [];
 
   let gaugeHeight = null;
   let discharge = null;
-  let temperatureC = null;
+  let tempC = null;
 
   for (const item of series) {
-    const paramCode = item?.variable?.variableCode?.[0]?.value;
-    const latest = item?.values?.[0]?.value?.[0]?.value;
+    const code = item.variable.variableCode[0].value;
+    const value = Number(item.values[0].value[0].value);
 
-    if (latest === undefined) continue;
-    const numericValue = Number(latest);
-
-    if (paramCode === "00065") gaugeHeight = numericValue;
-    if (paramCode === "00060") discharge = numericValue;
-    if (paramCode === "00010") temperatureC = numericValue;
+    if (code === "00065") gaugeHeight = value;
+    if (code === "00060") discharge = value;
+    if (code === "00010") tempC = value;
   }
 
   return {
     gaugeHeight,
     discharge,
-    temperature: temperatureC !== null ? (temperatureC * 9) / 5 + 32 : null
+    temperature: tempC !== null ? (tempC * 9) / 5 + 32 : null
   };
-}
-
-async function fetchRiverTrend(siteNumber) {
-  const today = new Date();
-  const start = new Date(today);
-  start.setDate(today.getDate() - 7);
-
-  const startDT = start.toISOString().slice(0, 10);
-  const endDT = today.toISOString().slice(0, 10);
-
-  const url =
-    `https://waterservices.usgs.gov/nwis/dv/?format=json&sites=${siteNumber}` +
-    `&startDT=${startDT}&endDT=${endDT}&parameterCd=00065&siteStatus=all`;
-
-  const response = await fetch(url);
-  if (!response.ok) {
-    return [];
-  }
-
-  const data = await response.json();
-  const series = data?.value?.timeSeries || [];
-  if (!series.length) return [];
-
-  const values = series[0]?.values?.[0]?.value || [];
-  return values.map((entry) => Number(entry.value)).filter((value) => !Number.isNaN(value));
 }
 
 async function fetchWeather(lat, lon) {
-  const url =
-    `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}` +
-    `&current=temperature_2m,weather_code,wind_speed_10m` +
-    `&daily=temperature_2m_max,time` +
-    `&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=7`;
+  try {
+    const point = await fetch(`https://api.weather.gov/points/${lat},${lon}`);
+    const pointData = await point.json();
 
-  const response = await fetch(url);
-  if (!response.ok) {
+    const forecastUrl = pointData.properties.forecast;
+    const hourlyUrl = pointData.properties.forecastHourly;
+
+    const forecast = await fetch(forecastUrl);
+    const forecastData = await forecast.json();
+
+    let currentTemp = null;
+    let windSpeed = null;
+    let text = null;
+
+    if (hourlyUrl) {
+      const hourly = await fetch(hourlyUrl);
+      const hourlyData = await hourly.json();
+      const now = hourlyData.properties.periods[0];
+
+      currentTemp = now.temperature;
+      text = now.shortForecast;
+
+      const match = now.windSpeed.match(/\d+/);
+      windSpeed = match ? Number(match[0]) : null;
+    }
+
+    const days = forecastData.properties.periods
+      .filter(p => p.isDaytime)
+      .slice(0, 7);
+
+    return {
+      currentTemp,
+      windSpeed,
+      text,
+      dailyTemps: days.map(d => d.temperature),
+      dailyTimes: days.map(d => d.startTime)
+    };
+
+  } catch {
     return null;
   }
-
-  const data = await response.json();
-
-  return {
-    currentTemp: data?.current?.temperature_2m ?? null,
-    windSpeed: data?.current?.wind_speed_10m ?? null,
-    weatherCode: data?.current?.weather_code ?? null,
-    dailyTemps: data?.daily?.temperature_2m_max || [],
-    dailyTimes: data?.daily?.time || []
-  };
 }
 
 function buildWeatherStrip(container, times, temps) {
-  if (!container) return;
-
   container.innerHTML = "";
-
   for (let i = 0; i < 7; i++) {
-    const item = document.createElement("span");
     const day = times[i] ? formatShortDay(times[i]) : "--";
-    const temp = temps[i] !== undefined && temps[i] !== null ? `${Math.round(temps[i])}°` : "--";
-    item.textContent = `${day} ${temp}`;
-    container.appendChild(item);
+    const temp = temps[i] ? `${temps[i]}°` : "--";
+    const span = document.createElement("span");
+    span.textContent = `${day} ${temp}`;
+    container.appendChild(span);
   }
 }
 
 function buildCard(item) {
-  const { river, readings, weather, trendValues, decision } = item;
+  const { river, readings, weather } = item;
   const node = template.content.cloneNode(true);
 
-  const riverName = node.querySelector(".river-name");
-  const riverSection = node.querySelector(".river-section");
-  const badge = node.querySelector(".status-badge");
-  const decisionBadge = node.querySelector(".decision-badge");
-  const gaugeHeight = node.querySelector(".gauge-height");
-  const discharge = node.querySelector(".discharge");
-  const temp = node.querySelector(".temp");
-  const gaugeSummary = node.querySelector(".gauge-summary");
-  const recommendationText = node.querySelector(".recommendation-text");
-  const rangeText = node.querySelector(".range-text");
-  const notes = node.querySelector(".notes");
-  const usgsLink = node.querySelector(".usgs-link");
+  node.querySelector(".river-name").textContent = river.river;
+  node.querySelector(".river-section").textContent = river.section;
+
+  node.querySelector(".gauge-height").textContent =
+    readings.gaugeHeight ? readings.gaugeHeight.toFixed(2) + " ft" : "--";
+
+  node.querySelector(".discharge").textContent =
+    readings.discharge ? Math.round(readings.discharge) + " cfs" : "--";
+
+  node.querySelector(".temp").textContent =
+    readings.temperature ? readings.temperature.toFixed(1) + "°F" : "--";
+
   const weatherCurrent = node.querySelector(".weather-current");
   const weatherSummary = node.querySelector(".weather-summary");
   const weatherStrip = node.querySelector(".weather-strip");
-  const trendText = node.querySelector(".trend-text");
-
-  riverName.textContent = river.river;
-  riverSection.textContent = `${river.section} • ${river.region}`;
-
-  const status = getStatus(readings.gaugeHeight, river.idealMin, river.idealMax);
-  badge.textContent = status.label;
-  gaugeSummary.textContent = status.summary;
-  recommendationText.textContent = status.recommendation;
-
-  if (decisionBadge) {
-    decisionBadge.textContent = decision.label;
-    if (decision.className) decisionBadge.classList.add(decision.className);
-  }
-
-  if (status.className) {
-    badge.classList.add(status.className);
-  }
-
-  gaugeHeight.textContent = readings.gaugeHeight !== null ? `${formatNumber(readings.gaugeHeight, 2)} ft` : "--";
-  discharge.textContent = readings.discharge !== null ? `${Math.round(readings.discharge)} cfs` : "--";
-  temp.textContent = readings.temperature !== null ? `${formatNumber(readings.temperature, 1)} °F` : "--";
-  rangeText.textContent = `${river.idealMin.toFixed(1)} ft to ${river.idealMax.toFixed(1)} ft`;
-  notes.textContent = river.notes;
-  usgsLink.href = `https://waterdata.usgs.gov/monitoring-location/${river.site}/`;
 
   if (weather) {
-    const weatherText = weatherCodeToText(weather.weatherCode);
-    const currentTempText = weather.currentTemp !== null ? `${Math.round(weather.currentTemp)}°F` : "--";
-    const windText = weather.windSpeed !== null ? `${Math.round(weather.windSpeed)} mph wind` : "wind unavailable";
-
-    if (weatherCurrent) weatherCurrent.textContent = `${currentTempText} • ${weatherText}`;
-    if (weatherSummary) weatherSummary.textContent = windText;
+    weatherCurrent.textContent = `${weather.currentTemp}°F • ${weather.text}`;
+    weatherSummary.textContent = `${weather.windSpeed} mph wind`;
     buildWeatherStrip(weatherStrip, weather.dailyTimes, weather.dailyTemps);
   } else {
-    if (weatherCurrent) weatherCurrent.textContent = "Weather unavailable";
-    if (weatherSummary) weatherSummary.textContent = "No forecast";
-    buildWeatherStrip(weatherStrip, [], []);
-  }
-
-  const trend = getTrendInfo(trendValues || []);
-  if (trendText) {
-    trendText.textContent = `${trend.arrow} ${trend.label} • ${trend.changeText}`;
+    weatherCurrent.textContent = "Weather unavailable";
   }
 
   return node;
 }
 
 async function loadRivers() {
-  hideMessage();
-  if (riverGrid) riverGrid.innerHTML = "";
-  if (topPicks) topPicks.innerHTML = "";
-  if (lastUpdated) lastUpdated.textContent = "Loading latest conditions...";
+  const list = await loadRiverList();
 
-  try {
-    if (rivers.length === 0) {
-      rivers = await loadRiverList();
-      if (riverCount) riverCount.textContent = rivers.length;
-    }
+  const items = await Promise.all(
+    list.map(async river => {
+      const readings = await fetchRiverData(river.site);
+      const weather = await fetchWeather(river.lat, river.lon);
+      return { river, readings, weather };
+    })
+  );
 
-    const items = await Promise.all(
-      rivers.map(async (river) => {
-        let readings = { gaugeHeight: null, discharge: null, temperature: null };
-        let weather = null;
-        let trendValues = [];
-
-        try {
-          readings = await fetchRiverData(river.site);
-        } catch {}
-
-        try {
-          weather = await fetchWeather(river.lat, river.lon);
-        } catch {}
-
-        try {
-          trendValues = await fetchRiverTrend(river.site);
-        } catch {}
-
-        const decision = getDecisionScore(readings, weather, trendValues, river);
-        return { river, readings, weather, trendValues, decision };
-      })
-    );
-
-    items
-      .sort((a, b) => b.decision.score - a.decision.score)
-      .forEach((item) => {
-        if (riverGrid) riverGrid.appendChild(buildCard(item));
-      });
-
-    renderTopPicks(items);
-
-    if (lastUpdated) {
-      lastUpdated.textContent = `Updated ${new Date().toLocaleString()}`;
-    }
-
-    const weatherFailedForAll = items.every((item) => item.weather === null);
-    if (weatherFailedForAll) {
-      showMessage("River data loaded, but weather did not. The weather source may be blocked or temporarily failing.");
-    }
-  } catch (error) {
-    console.error(error);
-    showMessage("The page loaded, but script logic failed after loading the river list.");
-    if (lastUpdated) lastUpdated.textContent = "Load failed";
-  }
+  riverGrid.innerHTML = "";
+  items.forEach(item => riverGrid.appendChild(buildCard(item)));
 }
 
-if (refreshBtn) {
-  refreshBtn.addEventListener("click", loadRivers);
-}
-
+refreshBtn.addEventListener("click", loadRivers);
 loadRivers();
