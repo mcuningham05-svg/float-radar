@@ -8,115 +8,91 @@
 </head>
 <body>
   <header class="hero">
+    <img class="hero-image" src="images/hero.jpg" alt="Float Radar hero" />
     <div class="hero-overlay"></div>
 
+    <div class="hero-topbar">
+      <div class="brand">
+        <span class="brand-mark">✦</span>
+        <span class="brand-text">Float Radar</span>
+      </div>
+
+      <nav class="top-nav" aria-label="Primary">
+        <a href="#" class="nav-link">Your Map</a>
+        <button id="refreshBtn" class="nav-button" type="button">Refresh Data</button>
+      </nav>
+    </div>
+
     <div class="hero-inner">
-      <div class="hero-copy">
-        <p class="eyebrow">Arkansas River Conditions</p>
-        <h1>Float Radar</h1>
-        <p class="hero-text">
-          Live river levels, weather, and float guidance for real river sections.
-        </p>
+      <p class="eyebrow">Arkansas River Conditions</p>
+      <h1>Find the Best Rivers to Float in Arkansas</h1>
+      <p class="hero-text">
+        Quick river conditions for beginner-friendly float planning.
+      </p>
 
-        <div class="hero-actions">
-          <button id="refreshBtn" type="button">Refresh Data</button>
-          <p id="lastUpdated">Loading latest conditions...</p>
-        </div>
+      <div class="hero-search-wrap">
+        <label class="sr-only" for="riverSearch">Search rivers</label>
+        <input
+          id="riverSearch"
+          class="hero-search"
+          type="search"
+          placeholder="Search rivers..."
+          autocomplete="off"
+        />
       </div>
 
-      <div class="hero-panel">
-        <div class="hero-stat">
-          <span class="hero-stat-label">Status</span>
-          <span class="hero-stat-value">Live</span>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-label">Source</span>
-          <span class="hero-stat-value">USGS + Weather</span>
-        </div>
-      </div>
+      <p id="lastUpdated" class="last-updated">Loading latest conditions...</p>
     </div>
   </header>
 
   <main class="app-shell">
-    <section id="messageBox" class="message-box hidden"></section>
+    <section id="messageBox" class="message-box hidden" aria-live="polite"></section>
 
-    <section class="section-header">
-      <div>
-        <p class="section-kicker">Dashboard</p>
-        <h2>River Sections</h2>
+    <section id="detailSection" class="detail-section hidden">
+      <div class="detail-card">
+        <div class="detail-head">
+          <div>
+            <p id="detailRiver" class="detail-river"></p>
+            <h2 id="detailSectionName" class="detail-section-name"></h2>
+          </div>
+          <button id="closeDetailBtn" class="detail-close" type="button">Close</button>
+        </div>
+
+        <div class="detail-stats">
+          <div class="detail-stat">
+            <span class="detail-stat-label">Level</span>
+            <span id="detailLevel" class="detail-stat-value">--</span>
+          </div>
+          <div class="detail-stat">
+            <span class="detail-stat-label">Flow</span>
+            <span id="detailFlow" class="detail-stat-value">--</span>
+          </div>
+          <div class="detail-stat">
+            <span class="detail-stat-label">Water Temp</span>
+            <span id="detailWaterTemp" class="detail-stat-value">--</span>
+          </div>
+          <div class="detail-stat">
+            <span class="detail-stat-label">Air</span>
+            <span id="detailAirTemp" class="detail-stat-value">--</span>
+          </div>
+        </div>
+
+        <div class="detail-meta">
+          <p id="detailCondition" class="detail-condition"></p>
+          <p id="detailRange" class="detail-range"></p>
+          <p id="detailNotes" class="detail-notes"></p>
+          <a id="detailUsgsLink" class="detail-link" href="#" target="_blank" rel="noopener noreferrer">Open source data →</a>
+        </div>
       </div>
     </section>
 
-    <section id="riverGrid" class="river-grid"></section>
+    <section class="section-header">
+      <p class="section-kicker">Dashboard</p>
+      <h2>River Sections</h2>
+    </section>
+
+    <section id="riverGrid" class="river-grid" aria-live="polite"></section>
   </main>
-
-  <template id="riverCardTemplate">
-    <article class="river-card">
-      <div class="card-main">
-        <div class="card-image-wrap">
-          <img class="river-image" src="" alt="" />
-        </div>
-
-        <div class="card-body">
-          <div class="card-top-row">
-            <div class="card-title-block">
-              <p class="card-kicker">Section</p>
-              <h3 class="river-name"></h3>
-              <p class="river-section"></p>
-            </div>
-            <span class="status-badge"></span>
-          </div>
-
-          <div class="card-primary-row">
-            <div class="gauge-panel">
-              <div>
-                <p class="gauge-label">Gauge</p>
-                <p class="gauge-height">--</p>
-              </div>
-              <div class="gauge-side">
-                <p class="gauge-label">Float Read</p>
-                <p class="gauge-summary"></p>
-              </div>
-            </div>
-          </div>
-
-          <div class="card-stats-row">
-            <div class="stat-grid">
-              <div class="stat-box">
-                <span class="stat-label">Flow</span>
-                <span class="discharge">--</span>
-              </div>
-              <div class="stat-box">
-                <span class="stat-label">Water Temp</span>
-                <span class="temp">--</span>
-              </div>
-            </div>
-
-            <div class="weather-panel">
-              <div class="weather-top">
-                <div>
-                  <p class="weather-label">Area Weather</p>
-                  <p class="weather-current">Loading weather...</p>
-                </div>
-                <p class="weather-summary"></p>
-              </div>
-              <div class="weather-strip"></div>
-            </div>
-          </div>
-
-          <div class="card-bottom-row">
-            <div class="info-stack">
-              <p class="recommendation-text"></p>
-              <p class="range-text"></p>
-              <p class="notes"></p>
-            </div>
-
-            <a class="usgs-link" href="#" target="_blank" rel="noopener noreferrer">View Gauge</a>
-          </div>
-        </div>
-      </div>
-    </article>
-  </template>
 
   <script src="script.js"></script>
 </body>
