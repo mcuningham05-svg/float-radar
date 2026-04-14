@@ -59,7 +59,8 @@ function renderCards(items) {
   riverGrid.innerHTML = "";
 
   items.forEach((item) => {
-    const { river, gauge, weather, status, index } = item;
+    const { gauge, weather, status, index } = item;
+    const river = item.river;
 
     const weatherLabel = getWeatherText(weather.code, weather.airTemp);
     const weatherEmoji = getWeatherEmoji(weather.code);
@@ -274,68 +275,6 @@ async function fetchWeatherData(lat, lon) {
   }
 }
 
-function getStatus(level, min, max) {
-  if (level === null || !Number.isFinite(min) || !Number.isFinite(max)) {
-    return {
-      label: "No Data",
-      text: "No live reading available",
-      badgeClass: "status-none",
-      bandClass: "none",
-      emoji: "😐"
-    };
-  }
-
-  if (level < min * 0.85) {
-    return {
-      label: "Low",
-      text: "Low water — may be scrapey",
-      badgeClass: "status-low",
-      bandClass: "low",
-      emoji: "☹️"
-    };
-  }
-
-  if (level < min) {
-    return {
-      label: "Marginal",
-      text: "Marginal — floatable in spots",
-      badgeClass: "status-marginal",
-      bandClass: "marginal",
-      emoji: "🙂"
-    };
-  }
-
-  const strongGoodThreshold = min + (max - min) * 0.55;
-
-  if (level <= max) {
-    return {
-      label: level >= strongGoodThreshold ? "Great" : "Good",
-      text: level >= strongGoodThreshold ? "Strong range — great float" : "In range — good float",
-      badgeClass: "status-good",
-      bandClass: "good",
-      emoji: level >= strongGoodThreshold ? "😄" : "😊"
-    };
-  }
-
-  if (level <= max * 1.3) {
-    return {
-      label: "High",
-      text: "High water — fast current",
-      badgeClass: "status-high",
-      bandClass: "high",
-      emoji: "😬"
-    };
-  }
-
-  return {
-    label: "Blown Out",
-    text: "Very high — not recommended",
-    badgeClass: "status-blown",
-    bandClass: "blown",
-    emoji: "😵"
-  };
-}
-
 function getWeatherEmoji(code) {
   if (code === null || code === undefined) return "❔";
   if (code === 0) return "☀️";
@@ -398,16 +337,6 @@ function formatFlow(flow) {
 
 function formatTemp(temp) {
   return temp !== null ? `${Math.round(temp)}°F` : "--";
-}
-
-function formatRange(min, max) {
-  const minText = Number.isFinite(min) ? min.toFixed(1) : "--";
-  const maxText = Number.isFinite(max) ? max.toFixed(1) : "--";
-  return `${minText}–${maxText} ft`;
-}
-
-function getUsgsSiteUrl(site) {
-  return `https://waterdata.usgs.gov/monitoring-location/${encodeURIComponent(site)}/`;
 }
 
 function cToF(celsius) {
