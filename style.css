@@ -1,25 +1,22 @@
 :root {
   --bg: #eef3f0;
   --bg-2: #f8fbf9;
-  --surface: rgba(255, 255, 255, 0.82);
-  --surface-strong: rgba(255, 255, 255, 0.92);
+  --surface: rgba(255, 255, 255, 0.84);
+  --surface-strong: rgba(255, 255, 255, 0.94);
   --surface-soft: #f4f8f6;
-  --text: #142019;
-  --muted: #6b786f;
+  --text: #132019;
+  --muted: #69776d;
   --border: rgba(18, 32, 23, 0.08);
-  --border-strong: rgba(18, 32, 23, 0.14);
 
   --forest-900: #143327;
   --forest-700: #245c45;
-  --forest-500: #3a7b5d;
   --river-700: #2e7688;
-  --river-500: #4d95a8;
 
   --good: #1d8a52;
   --warn: #ba7d16;
   --bad: #bf4b3a;
 
-  --shadow-xl: 0 24px 60px rgba(17, 29, 22, 0.16);
+  --shadow-xl: 0 24px 60px rgba(17, 29, 22, 0.14);
   --shadow-lg: 0 16px 34px rgba(17, 29, 22, 0.1);
   --shadow-md: 0 10px 22px rgba(17, 29, 22, 0.08);
   --shadow-sm: 0 6px 14px rgba(17, 29, 22, 0.05);
@@ -43,9 +40,9 @@ body {
   font-family: Inter, Arial, Helvetica, sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at top right, rgba(77, 149, 168, 0.1), transparent 20%),
-    radial-gradient(circle at top left, rgba(58, 123, 93, 0.07), transparent 16%),
-    linear-gradient(to bottom, #e6eeea 0%, var(--bg) 18%, var(--bg-2) 100%);
+    radial-gradient(circle at top right, rgba(77, 149, 168, 0.08), transparent 20%),
+    radial-gradient(circle at top left, rgba(58, 123, 93, 0.06), transparent 16%),
+    linear-gradient(to bottom, #e7efea 0%, var(--bg) 18%, var(--bg-2) 100%);
 }
 
 /* HERO */
@@ -67,7 +64,7 @@ body {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to bottom, rgba(6, 14, 10, 0.18), rgba(6, 14, 10, 0.5) 55%, rgba(6, 14, 10, 0.72) 100%);
+    linear-gradient(to bottom, rgba(6, 14, 10, 0.18), rgba(6, 14, 10, 0.5) 55%, rgba(6, 14, 10, 0.74) 100%);
 }
 
 .hero::after {
@@ -89,10 +86,6 @@ body {
   max-width: 1220px;
   margin: 0 auto;
   padding: 36px 20px 88px;
-  display: grid;
-  grid-template-columns: 1.25fr 0.55fr;
-  gap: 20px;
-  align-items: end;
 }
 
 .hero-copy {
@@ -108,7 +101,7 @@ body {
   backdrop-filter: blur(10px);
   font-size: 0.78rem;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
@@ -161,47 +154,15 @@ body {
   color: rgba(255, 255, 255, 0.92);
 }
 
-.hero-panel {
-  display: grid;
-  gap: 12px;
-  padding: 16px;
-  border-radius: 22px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  backdrop-filter: blur(12px);
-  box-shadow: var(--shadow-md);
-}
+/* APP */
 
-.hero-stat {
-  padding: 14px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.hero-stat-label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  opacity: 0.84;
-}
-
-.hero-stat-value {
-  display: block;
-  font-size: 1rem;
-  font-weight: 800;
-}
-
-/* APP SHELL */
-
-.app-shell {
-  position: relative;
-  z-index: 2;
+.app-shell,
+.container {
   max-width: 1220px;
   margin: -36px auto 0;
   padding: 0 20px 56px;
+  position: relative;
+  z-index: 2;
 }
 
 .message-box {
@@ -231,6 +192,13 @@ body {
   box-shadow: var(--shadow-sm);
 }
 
+.section-header h2 {
+  margin: 0;
+  font-size: 1.55rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
 .section-kicker {
   margin: 0 0 6px;
   font-size: 0.76rem;
@@ -238,13 +206,6 @@ body {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--muted);
-}
-
-.section-header h2 {
-  margin: 0;
-  font-size: 1.55rem;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
 }
 
 /* GRID */
@@ -275,17 +236,17 @@ body {
 .card-image-wrap {
   position: relative;
   width: 100%;
-  height: 210px;
+  height: 220px;
   overflow: hidden;
-  background: linear-gradient(135deg, #dbe7e0, #eef5ef);
+  background: linear-gradient(135deg, #dce8e1, #eef5ef);
 }
 
 .card-image-wrap::after {
   content: "";
   position: absolute;
   inset: auto 0 0 0;
-  height: 76px;
-  background: linear-gradient(to top, rgba(8, 17, 12, 0.18), rgba(8, 17, 12, 0));
+  height: 86px;
+  background: linear-gradient(to top, rgba(8, 17, 12, 0.24), rgba(8, 17, 12, 0));
 }
 
 .river-image {
@@ -314,7 +275,7 @@ body {
 .card-kicker {
   margin: 0 0 6px;
   color: var(--muted);
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -322,8 +283,8 @@ body {
 
 .river-name {
   margin: 0;
-  font-size: 1.42rem;
-  line-height: 1.06;
+  font-size: 1.44rem;
+  line-height: 1.05;
   letter-spacing: -0.03em;
   font-weight: 800;
 }
@@ -332,7 +293,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 72px;
+  min-width: 74px;
   padding: 8px 11px;
   border-radius: 999px;
   background: #edf2ee;
@@ -364,12 +325,12 @@ body {
   line-height: 1.45;
 }
 
-/* GAUGE */
+/* PRIMARY PANEL */
 
 .gauge-panel {
-  margin-top: 14px;
+  margin-top: 16px;
   padding: 18px;
-  border-radius: 20px;
+  border-radius: 22px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -382,7 +343,7 @@ body {
 
 .gauge-label {
   margin: 0 0 6px;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -391,10 +352,10 @@ body {
 
 .gauge-height {
   margin: 0;
-  font-size: 2.5rem;
+  font-size: 2.7rem;
   line-height: 1;
   font-weight: 800;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.05em;
   color: var(--forest-900);
 }
 
@@ -404,12 +365,12 @@ body {
 
 .gauge-summary {
   margin: 0;
-  font-size: 0.96rem;
+  font-size: 1rem;
   font-weight: 800;
   color: var(--forest-700);
 }
 
-/* STATS */
+/* SECONDARY */
 
 .stat-grid {
   margin-top: 14px;
@@ -429,7 +390,7 @@ body {
 }
 
 .stat-label {
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -461,7 +422,7 @@ body {
 
 .weather-label {
   margin: 0 0 6px;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -506,7 +467,7 @@ body {
   line-height: 1.2;
 }
 
-/* TEXT */
+/* INFO */
 
 .info-stack {
   margin-top: 14px;
@@ -558,16 +519,6 @@ body {
 
 /* MOBILE */
 
-@media (max-width: 860px) {
-  .hero-inner {
-    grid-template-columns: 1fr;
-  }
-
-  .hero-panel {
-    max-width: 320px;
-  }
-}
-
 @media (max-width: 760px) {
   .hero {
     min-height: 58vh;
@@ -577,7 +528,8 @@ body {
     padding: 28px 16px 68px;
   }
 
-  .app-shell {
+  .app-shell,
+  .container {
     padding: 0 16px 44px;
     margin-top: -22px;
   }
