@@ -8,7 +8,8 @@
     "idealMin": 3.0,
     "idealMax": 5.5,
     "region": "Upper Buffalo",
-    "notes": "Very popular float. Needs water. Below about 3 ft gets scrapey fast."
+    "notes": "Very popular float. Needs water. Below about 3 ft gets scrapey fast.",
+    "image": "images/buffalo-ponca-kyles.jpg"
   },
   {
     "river": "Buffalo River",
@@ -42,17 +43,6 @@
     "idealMax": 6.0,
     "region": "Middle Buffalo",
     "notes": "More consistent float section. Popular with outfitters."
-  },
-  {
-    "river": "Buffalo River",
-    "section": "Lower Buffalo (Rush area)",
-    "site": "07056700",
-    "lat": 36.042,
-    "lon": -92.555,
-    "idealMin": 3.0,
-    "idealMax": 7.0,
-    "region": "Lower Buffalo",
-    "notes": "Wider river. Handles higher water but gets pushy."
   },
   {
     "river": "Mulberry River",
