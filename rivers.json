@@ -8,7 +8,7 @@
     "idealMin": 3.0,
     "idealMax": 5.5,
     "region": "Upper Buffalo",
-    "notes": "Very popular float. Needs water. Below about 3 ft gets scrapey fast.",
+    "notes": "Low water below ~3 ft is usually scrapey. Above ~5.5 ft becomes fast and more technical.",
     "image": "images/buffalo-ponca-kyles.jpg"
   },
   {
@@ -20,7 +20,7 @@
     "idealMin": 2.8,
     "idealMax": 5.5,
     "region": "Upper Buffalo",
-    "notes": "Slightly more forgiving than Ponca. Still needs decent water."
+    "notes": "Holds slightly better than Ponca. Low levels still bony; higher water moves quickly."
   },
   {
     "river": "Buffalo River",
@@ -31,7 +31,7 @@
     "idealMin": 2.5,
     "idealMax": 5.5,
     "region": "Middle Buffalo",
-    "notes": "Good intermediate stretch. Holds water better than upper sections."
+    "notes": "More reliable float section. Typically runnable longer than upper sections."
   },
   {
     "river": "Buffalo River",
@@ -42,7 +42,7 @@
     "idealMin": 2.5,
     "idealMax": 6.0,
     "region": "Middle Buffalo",
-    "notes": "More consistent float section. Popular with outfitters."
+    "notes": "Popular outfitter stretch. Generally floatable more often than upper Buffalo."
   },
   {
     "river": "Buffalo River",
@@ -53,7 +53,7 @@
     "idealMin": 3.0,
     "idealMax": 7.0,
     "region": "Lower Buffalo",
-    "notes": "Wider river. Handles higher water but gets pushy."
+    "notes": "Wider river. Handles higher flows but current becomes strong at elevated levels."
   },
   {
     "river": "Mulberry River",
@@ -64,8 +64,7 @@
     "idealMin": 2.0,
     "idealMax": 4.5,
     "region": "Ozarks",
-    "notes": "Classic Mulberry float. Rain-dependent river.",
-    "image": "images/mulberry-turner-bend.jpg"
+    "notes": "Rain-dependent river. Below ~2 ft often too low; above ~4.5 ft can be fast."
   },
   {
     "river": "Mulberry River",
@@ -76,7 +75,7 @@
     "idealMin": 2.0,
     "idealMax": 4.5,
     "region": "Ozarks",
-    "notes": "Upper stretch. More technical when water is up."
+    "notes": "Upper Mulberry. More technical when water is up; low water limits floatability."
   },
   {
     "river": "Kings River",
@@ -87,7 +86,7 @@
     "idealMin": 2.0,
     "idealMax": 4.5,
     "region": "Northwest Arkansas",
-    "notes": "Popular float. Clear water river.",
+    "notes": "Clear-water float. Needs rainfall; low water can limit sections.",
     "image": "images/kings-trigger-gap.jpg.png"
   },
   {
@@ -99,7 +98,7 @@
     "idealMin": 2.0,
     "idealMax": 4.5,
     "region": "Northwest Arkansas",
-    "notes": "Shares gauge with upper river. Section varies."
+    "notes": "Conditions tied to same gauge as upper river. Flow varies with rainfall."
   },
   {
     "river": "White River",
@@ -110,7 +109,7 @@
     "idealMin": 2.5,
     "idealMax": 6.0,
     "region": "North Arkansas",
-    "notes": "Highly dam-controlled. Conditions vary by release schedule.",
+    "notes": "Dam-controlled river. Floatability depends heavily on release schedule.",
     "image": "images/white-river.jpg"
   },
   {
@@ -122,7 +121,7 @@
     "idealMin": 2.5,
     "idealMax": 5.0,
     "region": "Missouri Border",
-    "notes": "Popular float. Can get crowded."
+    "notes": "Generally floatable more consistently. Can become crowded in season."
   },
   {
     "river": "Caddo River",
@@ -133,7 +132,7 @@
     "idealMin": 2.5,
     "idealMax": 5.0,
     "region": "Ouachitas",
-    "notes": "Fun scenic river. Rain dependent."
+    "notes": "Rain-dependent. Low levels limit float; higher water moves quickly."
   },
   {
     "river": "Caddo River",
@@ -144,7 +143,7 @@
     "idealMin": 2.5,
     "idealMax": 5.0,
     "region": "Ouachitas",
-    "notes": "More stable section. Popular access."
+    "notes": "More stable access area. Common float section when water is adequate."
   },
   {
     "river": "Little Missouri River",
@@ -155,7 +154,7 @@
     "idealMin": 2.0,
     "idealMax": 4.5,
     "region": "Ouachitas",
-    "notes": "Cold water release below dam. Scenic float.",
+    "notes": "Cold water below dam. Flow depends on release schedule.",
     "image": "images/little-missouri-langley.jpg"
   },
   {
@@ -167,7 +166,7 @@
     "idealMin": 350,
     "idealMax": 900,
     "region": "North Arkansas",
-    "notes": "Flow-based river. Consistent cold water.",
+    "notes": "Spring-fed river. Flow measured in cfs; typically floatable most of the year.",
     "image": "images/spring-mammoth.jpg"
   },
   {
@@ -179,7 +178,7 @@
     "idealMin": 2.0,
     "idealMax": 5.0,
     "region": "North Arkansas",
-    "notes": "Underrated float. Rain dependent."
+    "notes": "Less crowded float. Requires rainfall; low water limits usability."
   },
   {
     "river": "Cadron Creek",
@@ -190,6 +189,6 @@
     "idealMin": 2.0,
     "idealMax": 4.5,
     "region": "Central Arkansas",
-    "notes": "Quick-hit float after rain."
+    "notes": "Short-lived float after rain events. Drops quickly."
   }
 ]
