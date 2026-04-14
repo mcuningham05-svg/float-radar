@@ -23,14 +23,28 @@
           <p id="lastUpdated">Loading latest conditions...</p>
         </div>
       </div>
+
+      <div class="hero-panel">
+        <div class="hero-stat">
+          <span class="hero-stat-label">Status</span>
+          <span class="hero-stat-value">Live</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-label">Source</span>
+          <span class="hero-stat-value">USGS + Weather</span>
+        </div>
+      </div>
     </div>
   </header>
 
-  <main class="container">
+  <main class="app-shell">
     <section id="messageBox" class="message-box hidden"></section>
 
     <section class="section-header">
-      <h2>River Sections</h2>
+      <div>
+        <p class="section-kicker">Dashboard</p>
+        <h2>River Sections</h2>
+      </div>
     </section>
 
     <section id="riverGrid" class="river-grid"></section>
@@ -42,45 +56,57 @@
         <img class="river-image" src="" alt="" />
       </div>
 
-      <div class="card-header">
-        <h3 class="river-name"></h3>
-        <span class="status-badge"></span>
-      </div>
-
-      <p class="river-section"></p>
-
-      <div class="gauge-panel">
-        <div>
-          <p class="gauge-label">Gauge</p>
-          <p class="gauge-height">--</p>
+      <div class="card-body">
+        <div class="card-header">
+          <div>
+            <p class="card-kicker">Section</p>
+            <h3 class="river-name"></h3>
+            <p class="river-section"></p>
+          </div>
+          <span class="status-badge"></span>
         </div>
-        <div>
-          <p class="gauge-summary"></p>
+
+        <div class="gauge-panel">
+          <div>
+            <p class="gauge-label">Gauge</p>
+            <p class="gauge-height">--</p>
+          </div>
+          <div class="gauge-side">
+            <p class="gauge-label">Float Read</p>
+            <p class="gauge-summary"></p>
+          </div>
         </div>
-      </div>
 
-      <div class="stat-grid">
-        <div class="stat-box">
-          <span>Flow</span>
-          <span class="discharge">--</span>
+        <div class="stat-grid">
+          <div class="stat-box">
+            <span class="stat-label">Flow</span>
+            <span class="discharge">--</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Water Temp</span>
+            <span class="temp">--</span>
+          </div>
         </div>
-        <div class="stat-box">
-          <span>Temp</span>
-          <span class="temp">--</span>
+
+        <div class="weather-panel">
+          <div class="weather-top">
+            <div>
+              <p class="weather-label">Area Weather</p>
+              <p class="weather-current">Loading weather...</p>
+            </div>
+            <p class="weather-summary"></p>
+          </div>
+          <div class="weather-strip"></div>
         </div>
+
+        <div class="info-stack">
+          <p class="recommendation-text"></p>
+          <p class="range-text"></p>
+          <p class="notes"></p>
+        </div>
+
+        <a class="usgs-link" href="#" target="_blank" rel="noopener noreferrer">View Gauge</a>
       </div>
-
-      <div class="weather-panel">
-        <p class="weather-current">Loading weather...</p>
-        <p class="weather-summary"></p>
-        <div class="weather-strip"></div>
-      </div>
-
-      <p class="recommendation-text"></p>
-      <p class="range-text"></p>
-      <p class="notes"></p>
-
-      <a class="usgs-link" href="#" target="_blank" rel="noopener noreferrer">View Gauge</a>
     </article>
   </template>
 
