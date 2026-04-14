@@ -52,60 +52,68 @@
 
   <template id="riverCardTemplate">
     <article class="river-card">
-      <div class="card-image-wrap">
-        <img class="river-image" src="" alt="" />
-      </div>
-
-      <div class="card-body">
-        <div class="card-header">
-          <div>
-            <p class="card-kicker">Section</p>
-            <h3 class="river-name"></h3>
-            <p class="river-section"></p>
-          </div>
-          <span class="status-badge"></span>
+      <div class="card-main">
+        <div class="card-image-wrap">
+          <img class="river-image" src="" alt="" />
         </div>
 
-        <div class="gauge-panel">
-          <div>
-            <p class="gauge-label">Gauge</p>
-            <p class="gauge-height">--</p>
-          </div>
-          <div class="gauge-side">
-            <p class="gauge-label">Float Read</p>
-            <p class="gauge-summary"></p>
-          </div>
-        </div>
-
-        <div class="stat-grid">
-          <div class="stat-box">
-            <span class="stat-label">Flow</span>
-            <span class="discharge">--</span>
-          </div>
-          <div class="stat-box">
-            <span class="stat-label">Water Temp</span>
-            <span class="temp">--</span>
-          </div>
-        </div>
-
-        <div class="weather-panel">
-          <div class="weather-top">
-            <div>
-              <p class="weather-label">Area Weather</p>
-              <p class="weather-current">Loading weather...</p>
+        <div class="card-body">
+          <div class="card-top-row">
+            <div class="card-title-block">
+              <p class="card-kicker">Section</p>
+              <h3 class="river-name"></h3>
+              <p class="river-section"></p>
             </div>
-            <p class="weather-summary"></p>
+            <span class="status-badge"></span>
           </div>
-          <div class="weather-strip"></div>
-        </div>
 
-        <div class="info-stack">
-          <p class="recommendation-text"></p>
-          <p class="range-text"></p>
-          <p class="notes"></p>
-        </div>
+          <div class="card-primary-row">
+            <div class="gauge-panel">
+              <div>
+                <p class="gauge-label">Gauge</p>
+                <p class="gauge-height">--</p>
+              </div>
+              <div class="gauge-side">
+                <p class="gauge-label">Float Read</p>
+                <p class="gauge-summary"></p>
+              </div>
+            </div>
+          </div>
 
-        <a class="usgs-link" href="#" target="_blank" rel="noopener noreferrer">View Gauge</a>
+          <div class="card-stats-row">
+            <div class="stat-grid">
+              <div class="stat-box">
+                <span class="stat-label">Flow</span>
+                <span class="discharge">--</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Water Temp</span>
+                <span class="temp">--</span>
+              </div>
+            </div>
+
+            <div class="weather-panel">
+              <div class="weather-top">
+                <div>
+                  <p class="weather-label">Area Weather</p>
+                  <p class="weather-current">Loading weather...</p>
+                </div>
+                <p class="weather-summary"></p>
+              </div>
+              <div class="weather-strip"></div>
+            </div>
+          </div>
+
+          <div class="card-bottom-row">
+            <div class="info-stack">
+              <p class="recommendation-text"></p>
+              <p class="range-text"></p>
+              <p class="notes"></p>
+            </div>
+
+            <a class="usgs-link" href="#" target="_blank" rel="noopener noreferrer">View Gauge</a>
+          </div>
+        </div>
       </div>
     </article>
   </template>
