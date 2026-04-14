@@ -7,71 +7,32 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <!-- HERO -->
   <header class="hero">
-    <div class="hero-layer hero-layer-1"></div>
-    <div class="hero-layer hero-layer-2"></div>
+    <div class="hero-overlay"></div>
 
     <div class="hero-inner">
       <div class="hero-copy">
         <p class="eyebrow">Arkansas River Conditions</p>
         <h1>Float Radar</h1>
         <p class="hero-text">
-          Live gauge levels, weather, and float-read guidance for real river sections.
+          Live river levels, weather, and float guidance for real river sections.
         </p>
 
         <div class="hero-actions">
-          <button id="refreshBtn" type="button">Refresh Data</button>
-          <p id="lastUpdated" class="last-updated">Loading latest conditions...</p>
-        </div>
-      </div>
-
-      <div class="hero-panel">
-        <p class="hero-panel-label">Current build</p>
-        <div class="hero-panel-grid">
-          <div class="hero-metric">
-            <span class="hero-metric-label">Sections</span>
-            <span class="hero-metric-value" id="riverCount">0</span>
-          </div>
-          <div class="hero-metric">
-            <span class="hero-metric-label">River data</span>
-            <span class="hero-metric-value">USGS</span>
-          </div>
-          <div class="hero-metric">
-            <span class="hero-metric-label">Weather</span>
-            <span class="hero-metric-value">Live</span>
-          </div>
+          <button id="refreshBtn">Refresh Data</button>
+          <p id="lastUpdated">Loading latest conditions...</p>
         </div>
       </div>
     </div>
   </header>
 
   <main class="container">
-    <section class="overview">
-      <div class="overview-card">
-        <p class="section-kicker">Overview</p>
-        <h2>River conditions in one clean view</h2>
-        <p class="overview-text">
-          Float Radar tracks river sections with live gauge height, flow, water temperature,
-          local weather, and short trend direction so you can judge whether a stretch looks runnable.
-        </p>
-      </div>
-
-      <div class="overview-card overview-card-small">
-        <p class="section-kicker">Direction</p>
-        <h3>Built to scale section by section</h3>
-        <p class="overview-text">
-          This version keeps the structure simple now so maps, hazards, outfitters, and deeper river pages can plug in later.
-        </p>
-      </div>
-    </section>
-
     <section id="messageBox" class="message-box hidden"></section>
 
     <section class="section-header">
-      <div>
-        <p class="section-kicker">Live data</p>
-        <h2>River sections</h2>
-      </div>
+      <h2>River Sections</h2>
     </section>
 
     <section id="riverGrid" class="river-grid"></section>
@@ -79,85 +40,50 @@
 
   <template id="riverCardTemplate">
     <article class="river-card">
-      <div class="card-topline"></div>
 
       <div class="card-image-wrap">
-        <img class="river-image" src="" alt="" loading="lazy" />
+        <img class="river-image" src="" alt="" />
       </div>
 
       <div class="card-header">
-        <div>
-          <p class="card-kicker">River section</p>
-          <h3 class="river-name"></h3>
-          <p class="river-section"></p>
-        </div>
-        <span class="status-badge">Unknown</span>
+        <h3 class="river-name"></h3>
+        <span class="status-badge"></span>
       </div>
+
+      <p class="river-section"></p>
 
       <div class="gauge-panel">
         <div>
-          <p class="gauge-label">Current gauge</p>
+          <p class="gauge-label">Gauge</p>
           <p class="gauge-height">--</p>
         </div>
-        <div class="gauge-side">
-          <span class="gauge-side-label">Float read</span>
-          <span class="gauge-summary">Checking</span>
+        <div>
+          <p class="gauge-summary"></p>
         </div>
       </div>
 
       <div class="stat-grid">
         <div class="stat-box">
-          <span class="stat-label">Flow</span>
-          <span class="discharge stat-value">--</span>
+          <span>Flow</span>
+          <span class="discharge">--</span>
         </div>
         <div class="stat-box">
-          <span class="stat-label">Water temp</span>
-          <span class="temp stat-value">--</span>
+          <span>Temp</span>
+          <span class="temp">--</span>
         </div>
       </div>
 
       <div class="weather-panel">
-        <div class="weather-top">
-          <div>
-            <p class="weather-label">Area weather</p>
-            <p class="weather-current">Loading weather...</p>
-          </div>
-          <div class="weather-side">
-            <span class="weather-side-label">7-day outlook</span>
-            <span class="weather-summary">Checking...</span>
-          </div>
-        </div>
-        <div class="weather-strip">
-          <span>--</span>
-          <span>--</span>
-          <span>--</span>
-          <span>--</span>
-          <span>--</span>
-          <span>--</span>
-          <span>--</span>
-        </div>
+        <p class="weather-current">Loading weather...</p>
+        <p class="weather-summary"></p>
+        <div class="weather-strip"></div>
       </div>
 
-      <div class="trend-panel">
-        <span class="trend-label">River trend</span>
-        <p class="trend-text">7-day gauge trend loading.</p>
-      </div>
-
-      <div class="insight-box">
-        <span class="insight-label">Recommendation</span>
-        <p class="recommendation-text"></p>
-      </div>
-
-      <div class="range-box">
-        <span class="range-label">Starter range</span>
-        <p class="range-text"></p>
-      </div>
-
+      <p class="recommendation-text"></p>
+      <p class="range-text"></p>
       <p class="notes"></p>
 
-      <div class="card-footer">
-        <a class="usgs-link" href="#" target="_blank" rel="noopener noreferrer">Open USGS gauge</a>
-      </div>
+      <a class="usgs-link" target="_blank">View Gauge</a>
     </article>
   </template>
 
