@@ -1,22 +1,13 @@
 :root {
-  --bg: #eef3ef;
   --text: #1b2620;
   --muted: #6f7d74;
 
-  --card: #ffffff;
   --border: rgba(0,0,0,0.06);
-
-  --band: linear-gradient(
-    to right,
-    rgba(150, 170, 120, 0.45),
-    rgba(120, 150, 110, 0.25)
-  );
 
   --radius: 18px;
 }
 
-/* ===== BASE ===== */
-
+/* BASE */
 body {
   margin: 0;
   font-family: Inter, Arial, sans-serif;
@@ -24,8 +15,7 @@ body {
   background: linear-gradient(to bottom, #e6eeea, #f7fbf9);
 }
 
-/* ===== HERO ===== */
-
+/* HERO */
 .hero {
   position: relative;
   height: 60vh;
@@ -42,11 +32,7 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.35),
-    rgba(0,0,0,0.7)
-  );
+  background: linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.7));
 }
 
 .hero-inner {
@@ -55,19 +41,7 @@ body {
   z-index: 1;
 }
 
-.hero h1 {
-  margin: 0;
-  font-size: 3.2rem;
-  font-weight: 800;
-}
-
-.hero-text {
-  margin-top: 10px;
-  font-size: 1rem;
-}
-
-/* ===== GRID ===== */
-
+/* GRID */
 .river-grid {
   max-width: 1100px;
   margin: -80px auto 40px;
@@ -78,24 +52,21 @@ body {
   gap: 18px;
 }
 
-/* ===== CARD ===== */
-
+/* CARD */
 .river-card {
-  background: var(--card);
+  background: #fff;
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--border);
   box-shadow: 0 14px 28px rgba(0,0,0,0.08);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: 0.15s;
 }
 
 .river-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.14);
 }
 
-/* ===== TOP ===== */
-
+/* BODY */
 .card-body {
   padding: 16px;
   display: flex;
@@ -103,42 +74,41 @@ body {
   gap: 12px;
 }
 
-/* ===== HEADER ===== */
-
+/* HEADER */
 .card-top-row {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
 }
 
 .river-name {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 800;
 }
 
 .river-section {
-  margin: 2px 0 0;
   font-size: 0.75rem;
   color: var(--muted);
 }
 
-/* ===== STATUS BADGE ===== */
-
+/* STATUS COLORS */
 .status-badge {
   padding: 6px 12px;
   border-radius: 999px;
   font-size: 0.7rem;
   font-weight: 800;
-  background: #eef2ef;
 }
 
-/* ===== MAIN STATS ===== */
+.status-good { background: rgba(80,160,90,0.25); }
+.status-low { background: rgba(200,160,70,0.35); }
+.status-warn { background: rgba(230,170,70,0.35); }
+.status-high { background: rgba(80,140,200,0.3); }
+.status-bad { background: rgba(200,80,80,0.3); }
 
+/* MAIN STATS */
 .card-main-stats {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
 }
 
 .level {
@@ -151,8 +121,7 @@ body {
   color: var(--muted);
 }
 
-/* ===== SECONDARY ===== */
-
+/* SECONDARY */
 .card-secondary {
   display: flex;
   justify-content: space-between;
@@ -160,27 +129,26 @@ body {
   color: var(--muted);
 }
 
-/* ===== BOTTOM BAND ===== */
-
+/* BOTTOM BAND */
 .condition-text {
-  margin-top: 6px;
   padding: 14px;
   font-size: 0.9rem;
   font-weight: 700;
-
-  background: var(--band);
-
+  background: linear-gradient(to right, rgba(150,170,120,0.45), rgba(120,150,110,0.25));
   border-top: 1px solid var(--border);
 }
 
-/* ===== MOBILE ===== */
+/* LINK */
+.card-link {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #2f6e5a;
+}
 
+/* MOBILE */
 @media (max-width: 700px) {
   .river-grid {
     grid-template-columns: 1fr;
-  }
-
-  .level {
-    font-size: 1.6rem;
   }
 }
