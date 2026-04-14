@@ -45,6 +45,17 @@
     "notes": "More consistent float section. Popular with outfitters."
   },
   {
+    "river": "Buffalo River",
+    "section": "Lower Buffalo (Rush area)",
+    "site": "07056700",
+    "lat": 36.042,
+    "lon": -92.555,
+    "idealMin": 3.0,
+    "idealMax": 7.0,
+    "region": "Lower Buffalo",
+    "notes": "Wider river. Handles higher water but gets pushy."
+  },
+  {
     "river": "Mulberry River",
     "section": "Turner Bend",
     "site": "07194800",
@@ -53,7 +64,8 @@
     "idealMin": 2.0,
     "idealMax": 4.5,
     "region": "Ozarks",
-    "notes": "Classic Mulberry float. Rain-dependent river."
+    "notes": "Classic Mulberry float. Rain-dependent river.",
+    "image": "images/mulberry-turner-bend.jpg"
   },
   {
     "river": "Mulberry River",
@@ -75,7 +87,8 @@
     "idealMin": 2.0,
     "idealMax": 4.5,
     "region": "Northwest Arkansas",
-    "notes": "Popular float. Clear water river."
+    "notes": "Popular float. Clear water river.",
+    "image": "images/kings-trigger-gap.jpg"
   },
   {
     "river": "Kings River",
@@ -97,7 +110,8 @@
     "idealMin": 2.5,
     "idealMax": 6.0,
     "region": "North Arkansas",
-    "notes": "Highly dam-controlled. Conditions vary by release schedule."
+    "notes": "Highly dam-controlled. Conditions vary by release schedule.",
+    "image": "images/white-river.jpg"
   },
   {
     "river": "Elk River",
@@ -141,7 +155,8 @@
     "idealMin": 2.0,
     "idealMax": 4.5,
     "region": "Ouachitas",
-    "notes": "Cold water release below dam. Scenic float."
+    "notes": "Cold water release below dam. Scenic float.",
+    "image": "images/little-missouri-langley.jpg"
   },
   {
     "river": "Spring River",
@@ -152,7 +167,8 @@
     "idealMin": 350,
     "idealMax": 900,
     "region": "North Arkansas",
-    "notes": "Flow-based river. Consistent cold water."
+    "notes": "Flow-based river. Consistent cold water.",
+    "image": "images/spring-mammoth.jpg"
   },
   {
     "river": "Strawberry River",
