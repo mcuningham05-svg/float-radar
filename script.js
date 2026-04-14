@@ -4,26 +4,12 @@ const refreshBtn = document.getElementById("refreshBtn");
 const lastUpdated = document.getElementById("lastUpdated");
 const messageBox = document.getElementById("messageBox");
 
-const detailSection = document.getElementById("detailSection");
-const detailRiver = document.getElementById("detailRiver");
-const detailSectionName = document.getElementById("detailSectionName");
-const detailLevel = document.getElementById("detailLevel");
-const detailFlow = document.getElementById("detailFlow");
-const detailWaterTemp = document.getElementById("detailWaterTemp");
-const detailAirTemp = document.getElementById("detailAirTemp");
-const detailCondition = document.getElementById("detailCondition");
-const detailRange = document.getElementById("detailRange");
-const detailNotes = document.getElementById("detailNotes");
-const detailUsgsLink = document.getElementById("detailUsgsLink");
-const closeDetailBtn = document.getElementById("closeDetailBtn");
-
 let riversData = [];
 let cardState = [];
-let gaugeCache = new Map();
-let weatherCache = new Map();
 
 async function loadApp() {
   showMessage("");
+
   try {
     const response = await fetch("rivers.json", { cache: "no-store" });
     if (!response.ok) {
@@ -49,11 +35,11 @@ async function buildCardState(rivers) {
   const results = await Promise.all(
     rivers.map(async (river, index) => {
       const [gauge, weather] = await Promise.all([
-        getGaugeData(river.site),
-        getWeatherData(river.lat, river.lon)
+        FloatRadar.getGaugeData(river.site),
+        FloatRadar.getWeatherData(river.lat, river.lon)
       ]);
 
-      const status = getStatus(gauge.level, river.idealMin, river.idealMax);
+      const status = FloatRadar.getStatus(gauge.level, river.idealMin, river.idealMax);
 
       return {
         index,
@@ -74,8 +60,8 @@ function renderCards(items) {
   items.forEach((item) => {
     const { river, gauge, weather, status, index } = item;
 
-    const weatherLabel = getWeatherText(weather.code, weather.airTemp);
-    const weatherEmoji = getWeatherEmoji(weather.code);
+    const weatherLabel = FloatRadar.getWeatherText(weather.code, weather.airTemp);
+    const weatherEmoji = FloatRadar.getWeatherEmoji(weather.code);
     const statusWithEmoji = `${status.emoji} ${status.label}`;
 
     const card = document.createElement("article");
@@ -87,42 +73,42 @@ function renderCards(items) {
         <div class="card-body">
           <div class="card-top-row">
             <div class="card-title-wrap">
-              <h3 class="river-name">${escapeHtml(river.river)}</h3>
-              <p class="river-section">${escapeHtml(river.section)}</p>
+              <h3 class="river-name">${FloatRadar.escapeHtml(river.river)}</h3>
+              <p class="river-section">${FloatRadar.escapeHtml(river.section)}</p>
             </div>
-            <span class="status-badge ${status.badgeClass}">${escapeHtml(statusWithEmoji)}</span>
+            <span class="status-badge ${status.badgeClass}">${FloatRadar.escapeHtml(statusWithEmoji)}</span>
           </div>
 
           <div class="card-main-stats">
-            <div class="level">${formatLevel(gauge.level)}</div>
-            <div class="flow">${formatFlow(gauge.flow)}</div>
+            <div class="level">${FloatRadar.formatLevel(gauge.level)}</div>
+            <div class="flow">${FloatRadar.formatFlow(gauge.flow)}</div>
           </div>
 
           <div class="card-secondary">
             <div class="secondary-item">
               <span class="secondary-label">Water Temp</span>
-              <span class="secondary-value">${formatTemp(gauge.waterTemp)}</span>
+              <span class="secondary-value">${FloatRadar.formatTemp(gauge.waterTemp)}</span>
             </div>
             <div class="secondary-item">
               <span class="secondary-label">Weather</span>
-              <span class="secondary-value">${escapeHtml(`${weatherEmoji} ${weatherLabel}`)}</span>
+              <span class="secondary-value">${FloatRadar.escapeHtml(`${weatherEmoji} ${weatherLabel}`)}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="card-band ${status.bandClass}">${escapeHtml(`${status.emoji} ${status.text}`)}</div>
+      <div class="card-band ${status.bandClass}">${FloatRadar.escapeHtml(`${status.emoji} ${status.text}`)}</div>
 
       <div class="card-footer">
         <span class="card-link">View Report →</span>
       </div>
     `;
 
-    card.addEventListener("click", () => openDetail(index));
+    card.addEventListener("click", () => openDetailPage(index));
     card.addEventListener("keydown", (event) => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
-        openDetail(index);
+        openDetailPage(index);
       }
     });
 
@@ -130,35 +116,14 @@ function renderCards(items) {
   });
 }
 
-function openDetail(index) {
-  const item = cardState[index];
-  if (!item) return;
-
-  const { river, gauge, weather, status } = item;
-
-  detailRiver.textContent = river.river;
-  detailSectionName.textContent = river.section;
-  detailLevel.textContent = formatLevel(gauge.level);
-  detailFlow.textContent = formatFlow(gauge.flow);
-  detailWaterTemp.textContent = formatTemp(gauge.waterTemp);
-  detailAirTemp.textContent = formatTemp(weather.airTemp);
-  detailCondition.textContent = `${status.emoji} ${status.text}`;
-  detailRange.textContent = `Ideal range: ${formatRange(river.idealMin, river.idealMax)}`;
-  detailNotes.textContent = river.notes || "";
-  detailUsgsLink.href = getUsgsSiteUrl(river.site);
-
-  detailSection.classList.remove("hidden");
-  detailSection.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-function closeDetail() {
-  detailSection.classList.add("hidden");
+function openDetailPage(index) {
+  window.location.href = `detail.html?i=${encodeURIComponent(index)}`;
 }
 
 async function refreshData() {
   refreshBtn.disabled = true;
   refreshBtn.textContent = "Refreshing...";
-  clearCaches();
+  FloatRadar.clearCaches();
 
   try {
     await buildCardState(riversData);
@@ -197,257 +162,6 @@ function filterCards(query) {
   renderCards(filtered);
 }
 
-function getGaugeData(site) {
-  if (!site) {
-    return Promise.resolve({
-      level: null,
-      flow: null,
-      waterTemp: null
-    });
-  }
-
-  if (!gaugeCache.has(site)) {
-    gaugeCache.set(site, fetchGaugeData(site));
-  }
-
-  return gaugeCache.get(site);
-}
-
-function getWeatherData(lat, lon) {
-  if (lat === undefined || lon === undefined || lat === null || lon === null) {
-    return Promise.resolve({
-      airTemp: null,
-      code: null
-    });
-  }
-
-  const key = `${lat},${lon}`;
-
-  if (!weatherCache.has(key)) {
-    weatherCache.set(key, fetchWeatherData(lat, lon));
-  }
-
-  return weatherCache.get(key);
-}
-
-async function fetchGaugeData(site) {
-  try {
-    const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${encodeURIComponent(site)}&parameterCd=00065,00060,00010&siteStatus=all`;
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(`USGS request failed (${response.status})`);
-    }
-
-    const data = await response.json();
-    const series = data?.value?.timeSeries || [];
-
-    let level = null;
-    let flow = null;
-    let waterTempC = null;
-
-    for (const item of series) {
-      const variableCode = item?.variable?.variableCode?.[0]?.value;
-      const value = item?.values?.[0]?.value?.[0]?.value;
-      const numericValue =
-        value !== undefined && value !== null && value !== ""
-          ? parseFloat(value)
-          : null;
-
-      if (!Number.isFinite(numericValue)) continue;
-
-      if (variableCode === "00065") {
-        level = numericValue;
-      } else if (variableCode === "00060") {
-        flow = numericValue;
-      } else if (variableCode === "00010") {
-        waterTempC = numericValue;
-      }
-    }
-
-    return {
-      level,
-      flow,
-      waterTemp: waterTempC !== null ? cToF(waterTempC) : null
-    };
-  } catch (error) {
-    console.error(`Gauge fetch failed for ${site}:`, error);
-    return {
-      level: null,
-      flow: null,
-      waterTemp: null
-    };
-  }
-}
-
-async function fetchWeatherData(lat, lon) {
-  try {
-    const url =
-      `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}` +
-      `&longitude=${encodeURIComponent(lon)}` +
-      `&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=auto`;
-
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(`Weather request failed (${response.status})`);
-    }
-
-    const data = await response.json();
-
-    return {
-      airTemp: Number.isFinite(data?.current?.temperature_2m) ? data.current.temperature_2m : null,
-      code: data?.current?.weather_code ?? null
-    };
-  } catch (error) {
-    console.error(`Weather fetch failed for ${lat}, ${lon}:`, error);
-    return {
-      airTemp: null,
-      code: null
-    };
-  }
-}
-
-function getStatus(level, min, max) {
-  if (level === null || !Number.isFinite(min) || !Number.isFinite(max)) {
-    return {
-      label: "No Data",
-      text: "No live reading available",
-      badgeClass: "status-none",
-      bandClass: "none",
-      emoji: "😐"
-    };
-  }
-
-  if (level < min * 0.85) {
-    return {
-      label: "Low",
-      text: "Low water — may be scrapey",
-      badgeClass: "status-low",
-      bandClass: "low",
-      emoji: "☹️"
-    };
-  }
-
-  if (level < min) {
-    return {
-      label: "Marginal",
-      text: "Marginal — floatable in spots",
-      badgeClass: "status-marginal",
-      bandClass: "marginal",
-      emoji: "🙂"
-    };
-  }
-
-  const strongGoodThreshold = min + (max - min) * 0.55;
-
-  if (level <= max) {
-    return {
-      label: level >= strongGoodThreshold ? "Great" : "Good",
-      text: level >= strongGoodThreshold ? "Strong range — great float" : "In range — good float",
-      badgeClass: "status-good",
-      bandClass: "good",
-      emoji: level >= strongGoodThreshold ? "😄" : "😊"
-    };
-  }
-
-  if (level <= max * 1.3) {
-    return {
-      label: "High",
-      text: "High water — fast current",
-      badgeClass: "status-high",
-      bandClass: "high",
-      emoji: "😬"
-    };
-  }
-
-  return {
-    label: "Blown Out",
-    text: "Very high — not recommended",
-    badgeClass: "status-blown",
-    bandClass: "blown",
-    emoji: "😵"
-  };
-}
-
-function getWeatherEmoji(code) {
-  if (code === null || code === undefined) return "❔";
-  if (code === 0) return "☀️";
-  if (code === 1) return "🌤️";
-  if (code === 2) return "⛅";
-  if (code === 3) return "☁️";
-  if (code === 45 || code === 48) return "🌫️";
-  if (code === 51 || code === 53 || code === 55 || code === 56 || code === 57) return "🌦️";
-  if (code === 61 || code === 63 || code === 65 || code === 66 || code === 67) return "🌧️";
-  if (code === 71 || code === 73 || code === 75 || code === 77 || code === 85 || code === 86) return "❄️";
-  if (code === 80 || code === 81 || code === 82) return "🌦️";
-  if (code === 95 || code === 96 || code === 99) return "⛈️";
-  return "🌤️";
-}
-
-function getWeatherText(code, airTemp) {
-  const temp = airTemp !== null ? `${Math.round(airTemp)}°F` : null;
-  const label = weatherCodeToText(code);
-
-  if (temp && label) return `${temp} • ${label}`;
-  if (temp) return temp;
-  return label || "Weather unavailable";
-}
-
-function weatherCodeToText(code) {
-  const map = {
-    0: "Clear",
-    1: "Mostly clear",
-    2: "Partly cloudy",
-    3: "Overcast",
-    45: "Fog",
-    48: "Fog",
-    51: "Light drizzle",
-    53: "Drizzle",
-    55: "Heavy drizzle",
-    61: "Light rain",
-    63: "Rain",
-    65: "Heavy rain",
-    71: "Light snow",
-    73: "Snow",
-    75: "Heavy snow",
-    80: "Showers",
-    81: "Showers",
-    82: "Heavy showers",
-    95: "Thunderstorm",
-    96: "Thunderstorm",
-    99: "Thunderstorm"
-  };
-
-  return map[code] || "Mixed";
-}
-
-function formatLevel(level) {
-  return level !== null ? `${level.toFixed(1)} ft` : "--";
-}
-
-function formatFlow(flow) {
-  return flow !== null ? `${Math.round(flow)} cfs` : "--";
-}
-
-function formatTemp(temp) {
-  return temp !== null ? `${Math.round(temp)}°F` : "--";
-}
-
-function formatRange(min, max) {
-  const minText = Number.isFinite(min) ? min.toFixed(1) : "--";
-  const maxText = Number.isFinite(max) ? max.toFixed(1) : "--";
-  return `${minText}–${maxText} ft`;
-}
-
-function getUsgsSiteUrl(site) {
-  return `https://waterdata.usgs.gov/monitoring-location/${encodeURIComponent(site)}/`;
-}
-
-function cToF(celsius) {
-  return (celsius * 9) / 5 + 32;
-}
-
 function updateLastUpdated() {
   const now = new Date();
   lastUpdated.textContent = `Updated ${now.toLocaleTimeString([], {
@@ -467,25 +181,10 @@ function showMessage(message) {
   messageBox.classList.remove("hidden");
 }
 
-function clearCaches() {
-  gaugeCache = new Map();
-  weatherCache = new Map();
-}
-
-function escapeHtml(value) {
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
 riverSearch.addEventListener("input", (event) => {
   filterCards(event.target.value);
 });
 
 refreshBtn.addEventListener("click", refreshData);
-closeDetailBtn.addEventListener("click", closeDetail);
 
 loadApp();
