@@ -7,8 +7,6 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <!-- HERO -->
   <header class="hero">
     <div class="hero-overlay"></div>
 
@@ -21,7 +19,7 @@
         </p>
 
         <div class="hero-actions">
-          <button id="refreshBtn">Refresh Data</button>
+          <button id="refreshBtn" type="button">Refresh Data</button>
           <p id="lastUpdated">Loading latest conditions...</p>
         </div>
       </div>
@@ -40,7 +38,6 @@
 
   <template id="riverCardTemplate">
     <article class="river-card">
-
       <div class="card-image-wrap">
         <img class="river-image" src="" alt="" />
       </div>
@@ -83,7 +80,7 @@
       <p class="range-text"></p>
       <p class="notes"></p>
 
-      <a class="usgs-link" target="_blank">View Gauge</a>
+      <a class="usgs-link" href="#" target="_blank" rel="noopener noreferrer">View Gauge</a>
     </article>
   </template>
 
