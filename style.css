@@ -40,8 +40,8 @@ body {
   font-family: Inter, Arial, Helvetica, sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at top right, rgba(47, 115, 132, 0.07), transparent 22%),
-    radial-gradient(circle at top left, rgba(46, 96, 71, 0.05), transparent 18%),
+    radial-gradient(circle at top right, rgba(47, 115, 132, 0.09), transparent 22%),
+    radial-gradient(circle at top left, rgba(46, 96, 71, 0.07), transparent 18%),
     linear-gradient(to bottom, #e7eeea 0%, var(--bg) 18%, var(--bg-soft) 100%);
 }
 
@@ -51,7 +51,7 @@ body {
   display: flex;
   align-items: flex-end;
   color: #fff;
-  background-image: url("images/hero-buffalo.jpg");
+  background-image: url("images/hero.jpg");
   background-size: cover;
   background-position: center;
   overflow: hidden;
@@ -62,7 +62,12 @@ body {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to bottom, rgba(6, 14, 10, 0.18), rgba(6, 14, 10, 0.44) 52%, rgba(6, 14, 10, 0.72) 100%);
+    linear-gradient(
+      to bottom,
+      rgba(6, 14, 10, 0.32),
+      rgba(6, 14, 10, 0.5) 48%,
+      rgba(6, 14, 10, 0.8) 100%
+    );
 }
 
 .hero::after {
@@ -120,7 +125,7 @@ body {
   max-width: 560px;
   font-size: 0.98rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(255, 255, 255, 0.94);
 }
 
 .hero-actions {
@@ -158,7 +163,7 @@ body {
 #lastUpdated {
   margin: 0;
   font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(255, 255, 255, 0.94);
 }
 
 .hero-panel {
@@ -255,7 +260,8 @@ body {
 .river-card {
   overflow: hidden;
   border-radius: var(--radius-xl);
-  background: var(--surface);
+  background:
+    linear-gradient(180deg, rgba(246, 251, 248, 0.96), rgba(255, 255, 255, 0.94));
   border: 1px solid rgba(255, 255, 255, 0.78);
   box-shadow: var(--shadow-lg);
   backdrop-filter: blur(14px);
@@ -276,8 +282,17 @@ body {
 .card-image-wrap {
   position: relative;
   min-height: 100%;
-  background: linear-gradient(135deg, #dce8e1, #eef5ef);
+  background:
+    linear-gradient(135deg, rgba(102, 162, 176, 0.16), rgba(98, 143, 110, 0.14)),
+    linear-gradient(180deg, #dfeae3, #eef5ef);
   overflow: hidden;
+}
+
+.card-image-wrap.no-image {
+  background:
+    radial-gradient(circle at 30% 30%, rgba(76, 150, 169, 0.18), transparent 35%),
+    radial-gradient(circle at 70% 70%, rgba(80, 136, 101, 0.15), transparent 40%),
+    linear-gradient(180deg, #e6f0eb, #edf5f1);
 }
 
 .river-image {
@@ -418,7 +433,8 @@ body {
 .stat-box {
   padding: 10px 12px;
   border-radius: 12px;
-  background: var(--surface-soft);
+  background:
+    linear-gradient(180deg, rgba(243, 249, 245, 0.95), rgba(236, 244, 240, 0.95));
   border: 1px solid rgba(20, 32, 25, 0.05);
   display: flex;
   flex-direction: column;
@@ -444,7 +460,8 @@ body {
 .weather-panel {
   padding: 10px 12px;
   border-radius: 12px;
-  background: linear-gradient(180deg, #f4f8fb, #edf4f8);
+  background:
+    linear-gradient(180deg, rgba(238, 247, 251, 0.95), rgba(232, 242, 247, 0.95));
   border: 1px solid rgba(46, 118, 136, 0.1);
 }
 
@@ -538,7 +555,7 @@ body {
 
 .notes {
   color: var(--muted);
-  background: transparent;
+  background: rgba(244, 248, 246, 0.65);
   border: 1px solid rgba(20, 32, 25, 0.06);
 }
 
