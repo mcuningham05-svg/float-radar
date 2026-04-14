@@ -75,7 +75,7 @@ function renderRiverCards(rivers) {
     temp.textContent = "--";
     weatherCurrent.textContent = "Loading weather...";
     weatherSummary.textContent = "";
-    recommendationText.textContent = "Loading recommendation...";
+    recommendationText.textContent = "";
     rangeText.textContent = `Ideal range: ${formatRange(river.idealMin, river.idealMax)}`;
     notes.textContent = river.notes || "";
 
@@ -106,9 +106,7 @@ async function populateAllCards() {
     cards.map(async (card) => {
       const index = Number(card.dataset.index);
       const river = riversData[index];
-
       if (!river) return;
-
       await populateCard(card, river);
     })
   );
@@ -136,36 +134,39 @@ async function populateCard(card, river) {
     const waterTemp = gaugeData.waterTemp;
     const condition = getCondition(level, river.idealMin, river.idealMax);
 
-    gaugeHeight.textContent = level !== null ? `${level.toFixed(2)} ft` : "Unavailable";
-    gaugeSummary.textContent = getGaugeSummary(condition, level, river.idealMin, river.idealMax);
+    // CLEAN DISPLAY LOGIC
+    gaugeHeight.textContent = level !== null ? `${level.toFixed(2)} ft` : "--";
 
-    discharge.textContent = flow !== null ? `${Math.round(flow)} cfs` : "Unavailable";
-    temp.textContent = waterTemp !== null ? `${Math.round(waterTemp)}°F` : "Unavailable";
+    gaugeSummary.textContent = getGaugeSummary(condition, level, river);
+
+    discharge.textContent = flow !== null ? `${Math.round(flow)} cfs` : "--";
+    temp.textContent = waterTemp !== null ? `${Math.round(waterTemp)}°F` : "--";
 
     weatherCurrent.textContent =
       weatherData.currentTemp !== null
-        ? `${Math.round(weatherData.currentTemp)}°F air temp`
-        : "Weather unavailable";
+        ? `${Math.round(weatherData.currentTemp)}°F air`
+        : "No weather";
 
-    weatherSummary.textContent = weatherData.summary;
+    weatherSummary.textContent = weatherData.summary || "";
+
     recommendationText.textContent = getRecommendationText(condition, river);
 
-    statusBadge.textContent = condition;
+    statusBadge.textContent = getShortCondition(condition);
     statusBadge.className = `status-badge ${getStatusClass(condition)}`;
 
     renderWeatherStrip(weatherStrip, weatherData.forecast);
   } catch (error) {
-    console.error(`Failed to populate card for ${river.river} / ${river.section}:`, error);
+    console.error("Card error:", error);
 
-    gaugeHeight.textContent = "Unavailable";
-    gaugeSummary.textContent = "Could not load gauge";
-    discharge.textContent = "Unavailable";
-    temp.textContent = "Unavailable";
-    weatherCurrent.textContent = "Weather unavailable";
+    gaugeHeight.textContent = "--";
+    gaugeSummary.textContent = "No data";
+    discharge.textContent = "--";
+    temp.textContent = "--";
+    weatherCurrent.textContent = "No weather";
     weatherSummary.textContent = "";
-    recommendationText.textContent = "Data unavailable right now.";
+    recommendationText.textContent = "";
 
-    statusBadge.textContent = "No Data";
+    statusBadge.textContent = "--";
     statusBadge.className = "status-badge";
 
     weatherStrip.innerHTML = "";
@@ -173,49 +174,26 @@ async function populateCard(card, river) {
 }
 
 function getGaugeData(site) {
-  if (!site) {
-    return Promise.resolve({
-      height: null,
-      discharge: null,
-      waterTemp: null
-    });
-  }
-
   if (!gaugeCache.has(site)) {
     gaugeCache.set(site, fetchGaugeData(site));
   }
-
   return gaugeCache.get(site);
 }
 
 function getWeatherData(lat, lon) {
   const key = `${lat},${lon}`;
-
-  if (!lat || !lon) {
-    return Promise.resolve({
-      currentTemp: null,
-      summary: "",
-      forecast: []
-    });
-  }
-
   if (!weatherCache.has(key)) {
     weatherCache.set(key, fetchWeatherData(lat, lon));
   }
-
   return weatherCache.get(key);
 }
 
 async function fetchGaugeData(site) {
   try {
-    const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${encodeURIComponent(site)}&parameterCd=00065,00060,00010&siteStatus=all`;
-    const response = await fetch(url);
+    const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${site}&parameterCd=00065,00060,00010`;
+    const res = await fetch(url);
+    const data = await res.json();
 
-    if (!response.ok) {
-      throw new Error(`USGS request failed (${response.status})`);
-    }
-
-    const data = await response.json();
     const series = data?.value?.timeSeries || [];
 
     let height = null;
@@ -223,85 +201,43 @@ async function fetchGaugeData(site) {
     let waterTempC = null;
 
     for (const item of series) {
-      const variableCode = item?.variable?.variableCode?.[0]?.value;
-      const value = item?.values?.[0]?.value?.[0]?.value;
-      const numericValue =
-        value !== undefined && value !== null && value !== ""
-          ? parseFloat(value)
-          : null;
+      const code = item.variable.variableCode[0].value;
+      const val = parseFloat(item.values[0].value[0].value);
 
-      if (!Number.isFinite(numericValue)) continue;
-
-      if (variableCode === "00065") {
-        height = numericValue;
-      } else if (variableCode === "00060") {
-        discharge = numericValue;
-      } else if (variableCode === "00010") {
-        waterTempC = numericValue;
-      }
+      if (code === "00065") height = val;
+      if (code === "00060") discharge = val;
+      if (code === "00010") waterTempC = val;
     }
 
     return {
       height,
       discharge,
-      waterTemp: waterTempC !== null ? cToF(waterTempC) : null
+      waterTemp: waterTempC ? cToF(waterTempC) : null
     };
-  } catch (error) {
-    console.error(`Gauge fetch failed for site ${site}:`, error);
-    return {
-      height: null,
-      discharge: null,
-      waterTemp: null
-    };
+  } catch {
+    return { height: null, discharge: null, waterTemp: null };
   }
 }
 
 async function fetchWeatherData(lat, lon) {
   try {
-    const url =
-      `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}` +
-      `&longitude=${encodeURIComponent(lon)}` +
-      `&current=temperature_2m,weather_code` +
-      `&daily=temperature_2m_max,temperature_2m_min,weather_code` +
-      `&temperature_unit=fahrenheit&timezone=auto`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&temperature_unit=fahrenheit`;
+    const res = await fetch(url);
+    const data = await res.json();
 
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(`Weather request failed (${response.status})`);
-    }
-
-    const data = await response.json();
-
-    const currentTemp = Number.isFinite(data?.current?.temperature_2m)
-      ? data.current.temperature_2m
-      : null;
-
-    const currentCode = data?.current?.weather_code;
-    const dailyTimes = data?.daily?.time || [];
-    const dailyMax = data?.daily?.temperature_2m_max || [];
-    const dailyMin = data?.daily?.temperature_2m_min || [];
-    const dailyCodes = data?.daily?.weather_code || [];
-
-    const forecast = dailyTimes.slice(0, 7).map((date, index) => ({
-      day: formatDayLabel(date),
-      high: Number.isFinite(dailyMax[index]) ? Math.round(dailyMax[index]) : null,
-      low: Number.isFinite(dailyMin[index]) ? Math.round(dailyMin[index]) : null,
-      label: weatherCodeToText(dailyCodes[index])
+    const forecast = (data.daily.time || []).slice(0, 7).map((d, i) => ({
+      day: new Date(d).toLocaleDateString(undefined, { weekday: "short" }),
+      high: data.daily.temperature_2m_max[i],
+      low: data.daily.temperature_2m_min[i]
     }));
 
     return {
-      currentTemp,
-      summary: weatherCodeToText(currentCode),
+      currentTemp: data.current.temperature_2m,
+      summary: weatherCodeToText(data.current.weather_code),
       forecast
     };
-  } catch (error) {
-    console.error(`Weather fetch failed for ${lat}, ${lon}:`, error);
-    return {
-      currentTemp: null,
-      summary: "",
-      forecast: []
-    };
+  } catch {
+    return { currentTemp: null, summary: "", forecast: [] };
   }
 }
 
@@ -312,38 +248,11 @@ function getCondition(level, min, max) {
   return "Good";
 }
 
-function getGaugeSummary(condition, level, min, max) {
-  if (level === null) return "No live gauge height";
-
-  if (condition === "Too Low") {
-    return `${level.toFixed(2)} ft • below ideal ${Number(min).toFixed(1)} ft`;
-  }
-
-  if (condition === "Too High") {
-    return `${level.toFixed(2)} ft • above ideal ${Number(max).toFixed(1)} ft`;
-  }
-
-  if (condition === "Good") {
-    return `${level.toFixed(2)} ft • in the float window`;
-  }
-
-  return "No gauge summary";
-}
-
-function getRecommendationText(condition, river) {
-  if (condition === "Good") {
-    return `Looks runnable for ${river.section}.`;
-  }
-
-  if (condition === "Too Low") {
-    return `Probably scrapey or bony for ${river.section}.`;
-  }
-
-  if (condition === "Too High") {
-    return `Likely pushy or less friendly for casual floating.`;
-  }
-
-  return "Not enough live data to judge right now.";
+function getShortCondition(condition) {
+  if (condition === "Good") return "Good";
+  if (condition === "Too Low") return "Low";
+  if (condition === "Too High") return "High";
+  return "--";
 }
 
 function getStatusClass(condition) {
@@ -353,110 +262,67 @@ function getStatusClass(condition) {
   return "";
 }
 
-function renderWeatherStrip(element, forecast) {
-  element.innerHTML = "";
+function getGaugeSummary(condition, level, river) {
+  if (level === null) return "No gauge data";
 
-  if (!forecast.length) {
-    const empty = document.createElement("span");
-    empty.textContent = "No forecast";
-    element.appendChild(empty);
-    return;
-  }
+  if (condition === "Good") return "In float range";
+  if (condition === "Too Low") return "Below float range";
+  if (condition === "Too High") return "Above float range";
 
-  forecast.forEach((day) => {
-    const chip = document.createElement("span");
-    const high = day.high !== null ? `${day.high}°` : "--";
-    const low = day.low !== null ? `${day.low}°` : "--";
+  return "";
+}
 
-    chip.textContent = `${day.day} ${high}/${low}`;
-    chip.title = day.label || "";
-    element.appendChild(chip);
+function getRecommendationText(condition, river) {
+  if (condition === "Good") return "Good float conditions";
+  if (condition === "Too Low") return "Likely scrapey";
+  if (condition === "Too High") return "High / pushy water";
+  return "";
+}
+
+function renderWeatherStrip(el, forecast) {
+  el.innerHTML = "";
+
+  forecast.forEach((d) => {
+    const span = document.createElement("span");
+    span.textContent = `${d.day} ${Math.round(d.high)}°`;
+    el.appendChild(span);
   });
 }
 
 function weatherCodeToText(code) {
-  const map = {
-    0: "Clear",
-    1: "Mostly clear",
-    2: "Partly cloudy",
-    3: "Overcast",
-    45: "Fog",
-    48: "Fog",
-    51: "Light drizzle",
-    53: "Drizzle",
-    55: "Heavy drizzle",
-    56: "Freezing drizzle",
-    57: "Freezing drizzle",
-    61: "Light rain",
-    63: "Rain",
-    65: "Heavy rain",
-    66: "Freezing rain",
-    67: "Freezing rain",
-    71: "Light snow",
-    73: "Snow",
-    75: "Heavy snow",
-    77: "Snow grains",
-    80: "Rain showers",
-    81: "Rain showers",
-    82: "Heavy showers",
-    85: "Snow showers",
-    86: "Snow showers",
-    95: "Thunderstorm",
-    96: "Thunderstorm",
-    99: "Thunderstorm"
-  };
-
-  return map[code] || "Weather";
-}
-
-function formatDayLabel(dateString) {
-  const date = new Date(`${dateString}T12:00:00`);
-  return date.toLocaleDateString(undefined, { weekday: "short" });
+  return ["Clear", "Partly cloudy", "Cloudy", "Rain", "Storm"][code] || "";
 }
 
 function formatRange(min, max) {
-  const minText = Number.isFinite(min) ? min : "--";
-  const maxText = Number.isFinite(max) ? max : "--";
-  return `${minText}–${maxText}`;
+  return `${min}–${max}`;
 }
 
 function getUsgsSiteUrl(site) {
-  return `https://waterdata.usgs.gov/monitoring-location/${encodeURIComponent(site)}/`;
+  return `https://waterdata.usgs.gov/monitoring-location/${site}/`;
 }
 
-function cToF(celsius) {
-  return (celsius * 9) / 5 + 32;
+function cToF(c) {
+  return (c * 9) / 5 + 32;
 }
 
 function updateLastUpdated() {
   const now = new Date();
-  lastUpdated.textContent = `Last updated ${now.toLocaleTimeString([], {
-    hour: "numeric",
-    minute: "2-digit"
-  })}`;
+  lastUpdated.textContent = `Updated ${now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}`;
 }
 
-function showMessage(message, isError = false) {
-  if (!message) {
-    messageBox.textContent = "";
+function showMessage(msg, error = false) {
+  if (!msg) {
     messageBox.classList.add("hidden");
-    messageBox.classList.remove("error");
     return;
   }
-
-  messageBox.textContent = message;
+  messageBox.textContent = msg;
   messageBox.classList.remove("hidden");
-
-  if (isError) {
-    messageBox.classList.add("error");
-  } else {
-    messageBox.classList.remove("error");
-  }
+  if (error) messageBox.classList.add("error");
 }
 
-function clearRequestCaches() {
-  gaugeCache = new Map();
-  weatherCache = new Map();
+function clearCaches() {
+  gaugeCache.clear();
+  weatherCache.clear();
 }
 
 refreshBtn.addEventListener("click", async () => {
@@ -464,23 +330,14 @@ refreshBtn.addEventListener("click", async () => {
 
   refreshInProgress = true;
   refreshBtn.disabled = true;
-  refreshBtn.textContent = "Refreshing...";
 
-  try {
-    clearRequestCaches();
-    renderRiverCards(riversData);
-    await populateAllCards();
-    updateLastUpdated();
-    showMessage("River data refreshed.");
-    window.setTimeout(() => showMessage("", false), 1500);
-  } catch (error) {
-    console.error("Refresh failed:", error);
-    showMessage("Refresh failed.", true);
-  } finally {
-    refreshInProgress = false;
-    refreshBtn.disabled = false;
-    refreshBtn.textContent = "Refresh Data";
-  }
+  clearCaches();
+  renderRiverCards(riversData);
+  await populateAllCards();
+  updateLastUpdated();
+
+  refreshBtn.disabled = false;
+  refreshInProgress = false;
 });
 
 loadApp();
