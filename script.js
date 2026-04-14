@@ -74,6 +74,10 @@ function renderCards(items) {
   items.forEach((item) => {
     const { river, gauge, weather, status, index } = item;
 
+    const weatherLabel = getWeatherText(weather.code, weather.airTemp);
+    const weatherEmoji = getWeatherEmoji(weather.code);
+    const statusWithEmoji = `${status.emoji} ${status.label}`;
+
     const card = document.createElement("article");
     card.className = "river-card";
     card.tabIndex = 0;
@@ -86,7 +90,7 @@ function renderCards(items) {
               <h3 class="river-name">${escapeHtml(river.river)}</h3>
               <p class="river-section">${escapeHtml(river.section)}</p>
             </div>
-            <span class="status-badge ${status.badgeClass}">${escapeHtml(status.label)}</span>
+            <span class="status-badge ${status.badgeClass}">${escapeHtml(statusWithEmoji)}</span>
           </div>
 
           <div class="card-main-stats">
@@ -101,13 +105,13 @@ function renderCards(items) {
             </div>
             <div class="secondary-item">
               <span class="secondary-label">Weather</span>
-              <span class="secondary-value">${escapeHtml(getWeatherText(weather.code, weather.airTemp))}</span>
+              <span class="secondary-value">${escapeHtml(`${weatherEmoji} ${weatherLabel}`)}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="card-band ${status.bandClass}">${escapeHtml(status.text)}</div>
+      <div class="card-band ${status.bandClass}">${escapeHtml(`${status.emoji} ${status.text}`)}</div>
 
       <div class="card-footer">
         <span class="card-link">View Report →</span>
@@ -138,7 +142,7 @@ function openDetail(index) {
   detailFlow.textContent = formatFlow(gauge.flow);
   detailWaterTemp.textContent = formatTemp(gauge.waterTemp);
   detailAirTemp.textContent = formatTemp(weather.airTemp);
-  detailCondition.textContent = status.text;
+  detailCondition.textContent = `${status.emoji} ${status.text}`;
   detailRange.textContent = `Ideal range: ${formatRange(river.idealMin, river.idealMax)}`;
   detailNotes.textContent = river.notes || "";
   detailUsgsLink.href = getUsgsSiteUrl(river.site);
@@ -310,7 +314,8 @@ function getStatus(level, min, max) {
       label: "No Data",
       text: "No live reading available",
       badgeClass: "status-none",
-      bandClass: "none"
+      bandClass: "none",
+      emoji: "😐"
     };
   }
 
@@ -319,7 +324,8 @@ function getStatus(level, min, max) {
       label: "Low",
       text: "Low water — may be scrapey",
       badgeClass: "status-low",
-      bandClass: "low"
+      bandClass: "low",
+      emoji: "☹️"
     };
   }
 
@@ -328,16 +334,20 @@ function getStatus(level, min, max) {
       label: "Marginal",
       text: "Marginal — floatable in spots",
       badgeClass: "status-marginal",
-      bandClass: "marginal"
+      bandClass: "marginal",
+      emoji: "🙂"
     };
   }
 
+  const strongGoodThreshold = min + (max - min) * 0.55;
+
   if (level <= max) {
     return {
-      label: "Good",
-      text: "In range — good float",
+      label: level >= strongGoodThreshold ? "Great" : "Good",
+      text: level >= strongGoodThreshold ? "Strong range — great float" : "In range — good float",
       badgeClass: "status-good",
-      bandClass: "good"
+      bandClass: "good",
+      emoji: level >= strongGoodThreshold ? "😄" : "😊"
     };
   }
 
@@ -346,7 +356,8 @@ function getStatus(level, min, max) {
       label: "High",
       text: "High water — fast current",
       badgeClass: "status-high",
-      bandClass: "high"
+      bandClass: "high",
+      emoji: "😬"
     };
   }
 
@@ -354,8 +365,24 @@ function getStatus(level, min, max) {
     label: "Blown Out",
     text: "Very high — not recommended",
     badgeClass: "status-blown",
-    bandClass: "blown"
+    bandClass: "blown",
+    emoji: "😵"
   };
+}
+
+function getWeatherEmoji(code) {
+  if (code === null || code === undefined) return "❔";
+  if (code === 0) return "☀️";
+  if (code === 1) return "🌤️";
+  if (code === 2) return "⛅";
+  if (code === 3) return "☁️";
+  if (code === 45 || code === 48) return "🌫️";
+  if (code === 51 || code === 53 || code === 55 || code === 56 || code === 57) return "🌦️";
+  if (code === 61 || code === 63 || code === 65 || code === 66 || code === 67) return "🌧️";
+  if (code === 71 || code === 73 || code === 75 || code === 77 || code === 85 || code === 86) return "❄️";
+  if (code === 80 || code === 81 || code === 82) return "🌦️";
+  if (code === 95 || code === 96 || code === 99) return "⛈️";
+  return "🌤️";
 }
 
 function getWeatherText(code, airTemp) {
