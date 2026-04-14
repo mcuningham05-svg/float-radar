@@ -13,10 +13,10 @@
 
     <div class="hero-inner">
       <div class="hero-copy">
-        <p class="eyebrow">Live River Conditions</p>
+        <p class="eyebrow">Arkansas River Conditions</p>
         <h1>Float Radar</h1>
         <p class="hero-text">
-          River levels, weather, and trend direction in one place.
+          Live gauge levels, weather, and float-read guidance for real river sections.
         </p>
 
         <div class="hero-actions">
@@ -26,19 +26,19 @@
       </div>
 
       <div class="hero-panel">
-        <p class="hero-panel-label">Today’s build</p>
+        <p class="hero-panel-label">Current build</p>
         <div class="hero-panel-grid">
           <div class="hero-metric">
-            <span class="hero-metric-label">Rivers</span>
+            <span class="hero-metric-label">Sections</span>
             <span class="hero-metric-value" id="riverCount">0</span>
           </div>
           <div class="hero-metric">
-            <span class="hero-metric-label">Data</span>
+            <span class="hero-metric-label">River data</span>
             <span class="hero-metric-value">USGS</span>
           </div>
           <div class="hero-metric">
-            <span class="hero-metric-label">Mode</span>
-            <span class="hero-metric-value">Scalable</span>
+            <span class="hero-metric-label">Weather</span>
+            <span class="hero-metric-value">Live</span>
           </div>
         </div>
       </div>
@@ -48,18 +48,19 @@
   <main class="container">
     <section class="overview">
       <div class="overview-card">
-        <p class="section-kicker">Snapshot</p>
-        <h2>River + weather dashboard</h2>
+        <p class="section-kicker">Overview</p>
+        <h2>River conditions in one clean view</h2>
         <p class="overview-text">
-          This version is built to scale. River sections now come from a data file instead of being hard-coded in the app.
+          Float Radar tracks river sections with live gauge height, flow, water temperature,
+          local weather, and short trend direction so you can judge whether a stretch looks runnable.
         </p>
       </div>
 
       <div class="overview-card overview-card-small">
-        <p class="section-kicker">Goal</p>
-        <h3>Every Arkansas river, section by section</h3>
+        <p class="section-kicker">Direction</p>
+        <h3>Built to scale section by section</h3>
         <p class="overview-text">
-          Gauge data, weather, and 7-day trends all tied to real float sections.
+          This version keeps the structure simple now so maps, hazards, outfitters, and deeper river pages can plug in later.
         </p>
       </div>
     </section>
@@ -68,8 +69,8 @@
 
     <section class="section-header">
       <div>
-        <p class="section-kicker">Conditions</p>
-        <h2>River dashboard</h2>
+        <p class="section-kicker">Live data</p>
+        <h2>River sections</h2>
       </div>
     </section>
 
@@ -86,7 +87,7 @@
 
       <div class="card-header">
         <div>
-          <p class="card-kicker">River</p>
+          <p class="card-kicker">River section</p>
           <h3 class="river-name"></h3>
           <p class="river-section"></p>
         </div>
@@ -119,11 +120,11 @@
         <div class="weather-top">
           <div>
             <p class="weather-label">Area weather</p>
-            <p class="weather-current">Coming next</p>
+            <p class="weather-current">Loading weather...</p>
           </div>
           <div class="weather-side">
-            <span class="weather-side-label">7-day</span>
-            <span class="weather-summary">Soon</span>
+            <span class="weather-side-label">7-day outlook</span>
+            <span class="weather-summary">Checking...</span>
           </div>
         </div>
         <div class="weather-strip">
@@ -139,7 +140,7 @@
 
       <div class="trend-panel">
         <span class="trend-label">River trend</span>
-        <p class="trend-text">7-day gauge trend coming next.</p>
+        <p class="trend-text">7-day gauge trend loading.</p>
       </div>
 
       <div class="insight-box">
