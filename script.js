@@ -1,6 +1,7 @@
 const container = document.getElementById("riverContainer");
+const detailView = document.getElementById("detailView");
 
-// Fetch river data
+// Load rivers
 async function loadRivers() {
   try {
     const res = await fetch("rivers.json");
@@ -13,7 +14,7 @@ async function loadRivers() {
   }
 }
 
-// Fetch USGS data
+// Fetch USGS gauge
 async function fetchGauge(site) {
   try {
     const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${site}&parameterCd=00065&siteStatus=all`;
@@ -29,7 +30,7 @@ async function fetchGauge(site) {
   }
 }
 
-// Fetch weather (Open-Meteo)
+// Fetch weather
 async function fetchWeather(lat, lon) {
   try {
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m`;
@@ -42,7 +43,7 @@ async function fetchWeather(lat, lon) {
   }
 }
 
-// Determine condition
+// Condition logic
 function getCondition(level, min, max) {
   if (level === null) return "No Data";
   if (level < min) return "Too Low";
@@ -50,15 +51,14 @@ function getCondition(level, min, max) {
   return "Good";
 }
 
-// Render rivers
-async function renderRivers(rivers) {
+// Render list view
+function renderRivers(rivers) {
   container.innerHTML = "";
 
-  for (const river of rivers) {
+  rivers.forEach((river) => {
     const card = document.createElement("div");
     card.className = "river-card";
 
-    // Image (lazy loaded)
     const imageHTML = river.image
       ? `<img src="${river.image}" alt="${river.river}" loading="lazy" />`
       : "";
@@ -74,14 +74,16 @@ async function renderRivers(rivers) {
       </div>
     `;
 
+    // CLICK HANDLER
+    card.addEventListener("click", () => openDetailView(river));
+
     container.appendChild(card);
 
-    // Load data AFTER card renders (faster UI feel)
     updateCardData(card, river);
-  }
+  });
 }
 
-// Update each card asynchronously
+// Update card data
 async function updateCardData(card, river) {
   const levelEl = card.querySelector(".level");
   const weatherEl = card.querySelector(".weather");
@@ -98,6 +100,46 @@ async function updateCardData(card, river) {
 
   const condition = getCondition(level, river.idealMin, river.idealMax);
   conditionEl.textContent = `Condition: ${condition}`;
+}
+
+// OPEN DETAIL VIEW
+async function openDetailView(river) {
+  container.style.display = "none";
+  detailView.style.display = "block";
+
+  const level = await fetchGauge(river.site);
+  const temp = await fetchWeather(river.lat, river.lon);
+  const condition = getCondition(level, river.idealMin, river.idealMax);
+
+  detailView.innerHTML = `
+    <button id="backBtn">← Back</button>
+
+    ${
+      river.image
+        ? `<img class="detail-image" src="${river.image}" alt="${river.river}" />`
+        : ""
+    }
+
+    <h1>${river.river}</h1>
+    <h3>${river.section}</h3>
+
+    <p><strong>Level:</strong> ${
+      level !== null ? level.toFixed(2) + " ft" : "Unavailable"
+    }</p>
+
+    <p><strong>Temp:</strong> ${
+      temp !== null ? Math.round(temp) + "°F" : "Unavailable"
+    }</p>
+
+    <p><strong>Condition:</strong> ${condition}</p>
+
+    <p class="notes">${river.notes || ""}</p>
+  `;
+
+  document.getElementById("backBtn").addEventListener("click", () => {
+    detailView.style.display = "none";
+    container.style.display = "grid";
+  });
 }
 
 // Init
