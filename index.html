@@ -48,44 +48,6 @@
   <main class="app-shell">
     <section id="messageBox" class="message-box hidden" aria-live="polite"></section>
 
-    <section id="detailSection" class="detail-section hidden">
-      <div class="detail-card">
-        <div class="detail-head">
-          <div>
-            <p id="detailRiver" class="detail-river"></p>
-            <h2 id="detailSectionName" class="detail-section-name"></h2>
-          </div>
-          <button id="closeDetailBtn" class="detail-close" type="button">Close</button>
-        </div>
-
-        <div class="detail-stats">
-          <div class="detail-stat">
-            <span class="detail-stat-label">Level</span>
-            <span id="detailLevel" class="detail-stat-value">--</span>
-          </div>
-          <div class="detail-stat">
-            <span class="detail-stat-label">Flow</span>
-            <span id="detailFlow" class="detail-stat-value">--</span>
-          </div>
-          <div class="detail-stat">
-            <span class="detail-stat-label">Water Temp</span>
-            <span id="detailWaterTemp" class="detail-stat-value">--</span>
-          </div>
-          <div class="detail-stat">
-            <span class="detail-stat-label">Air</span>
-            <span id="detailAirTemp" class="detail-stat-value">--</span>
-          </div>
-        </div>
-
-        <div class="detail-meta">
-          <p id="detailCondition" class="detail-condition"></p>
-          <p id="detailRange" class="detail-range"></p>
-          <p id="detailNotes" class="detail-notes"></p>
-          <a id="detailUsgsLink" class="detail-link" href="#" target="_blank" rel="noopener noreferrer">Open source data →</a>
-        </div>
-      </div>
-    </section>
-
     <section class="section-header">
       <p class="section-kicker">Dashboard</p>
       <h2>River Sections</h2>
@@ -94,6 +56,7 @@
     <section id="riverGrid" class="river-grid" aria-live="polite"></section>
   </main>
 
+  <script src="app.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
