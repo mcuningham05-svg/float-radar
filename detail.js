@@ -164,56 +164,6 @@ async function fetchWeatherData(lat, lon) {
   }
 }
 
-function getStatus(level, min, max) {
-  if (level === null || !Number.isFinite(min) || !Number.isFinite(max)) {
-    return {
-      label: "No Data",
-      text: "No live reading available",
-      emoji: "😐"
-    };
-  }
-
-  if (level < min * 0.85) {
-    return {
-      label: "Low",
-      text: "Low water — may be scrapey",
-      emoji: "☹️"
-    };
-  }
-
-  if (level < min) {
-    return {
-      label: "Marginal",
-      text: "Marginal — floatable in spots",
-      emoji: "🙂"
-    };
-  }
-
-  const strongGoodThreshold = min + (max - min) * 0.55;
-
-  if (level <= max) {
-    return {
-      label: level >= strongGoodThreshold ? "Great" : "Good",
-      text: level >= strongGoodThreshold ? "Strong range — great float" : "In range — good float",
-      emoji: level >= strongGoodThreshold ? "😄" : "😊"
-    };
-  }
-
-  if (level <= max * 1.3) {
-    return {
-      label: "High",
-      text: "High water — fast current",
-      emoji: "😬"
-    };
-  }
-
-  return {
-    label: "Blown Out",
-    text: "Very high — not recommended",
-    emoji: "😵"
-  };
-}
-
 function formatLevel(level) {
   return level !== null ? `${level.toFixed(1)} ft` : "--";
 }
