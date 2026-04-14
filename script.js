@@ -60,32 +60,31 @@ async function fetchWeather(lat, lon) {
 // ===== STATUS LOGIC =====
 function getStatus(level, min, max) {
   if (level === null) {
-    return { label: "No Data", text: "No data available" };
+    return { label: "No Data", text: "No data available", class: "status-none" };
   }
 
   if (level < min * 0.85) {
-    return { label: "Low", text: "Low water — may be scrapey" };
+    return { label: "Low", text: "Low water — may be scrapey", class: "status-low" };
   }
 
   if (level < min) {
-    return { label: "Marginal", text: "Marginal — floatable in spots" };
+    return { label: "Marginal", text: "Marginal — floatable in spots", class: "status-warn" };
   }
 
   if (level <= max) {
-    return { label: "Good", text: "In range — good float" };
+    return { label: "Good", text: "In range — good float", class: "status-good" };
   }
 
   if (level <= max * 1.3) {
-    return { label: "High", text: "High water — fast current" };
+    return { label: "High", text: "High water — fast current", class: "status-high" };
   }
 
-  return { label: "Blown Out", text: "Very high — not recommended" };
+  return { label: "Blown Out", text: "Very high — not recommended", class: "status-bad" };
 }
 
 // ===== WEATHER TEXT =====
 function weatherText(code) {
   if (code === null) return "Weather unavailable";
-
   if (code === 0) return "Clear";
   if (code <= 2) return "Partly cloudy";
   if (code <= 48) return "Cloudy";
@@ -122,6 +121,8 @@ function renderRivers(rivers) {
         </div>
 
         <div class="condition-text">Loading...</div>
+
+        <div class="card-link">View Report →</div>
       </div>
     `;
 
@@ -144,7 +145,10 @@ function renderRivers(rivers) {
     card.querySelector(".weather").textContent =
       weatherText(weather.code);
 
-    card.querySelector(".status-badge").textContent = status.label;
+    const badge = card.querySelector(".status-badge");
+    badge.textContent = status.label;
+    badge.classList.add(status.class);
+
     card.querySelector(".condition-text").textContent = status.text;
   });
 }
