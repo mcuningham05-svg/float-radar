@@ -3,11 +3,26 @@ const riverSearch = document.getElementById("riverSearch");
 const refreshBtn = document.getElementById("refreshBtn");
 const lastUpdated = document.getElementById("lastUpdated");
 const messageBox = document.getElementById("messageBox");
+const heroTipText = document.getElementById("heroTipText");
 
 let riversData = [];
 let cardState = [];
 let gaugeCache = new Map();
 let weatherCache = new Map();
+
+const heroTips = [
+  "Drink lots of water.",
+  "Don’t forget your life vest.",
+  "Pick up your trash.",
+  "Check the weather before you launch.",
+  "Tell someone your float plan.",
+  "Wear sunscreen.",
+  "Watch for strainers and downed trees.",
+  "Bring a dry bag for your phone and keys."
+];
+
+let currentTipIndex = 0;
+let tipIntervalId = null;
 
 async function loadApp() {
   showMessage("");
@@ -27,6 +42,7 @@ async function loadApp() {
     await buildCardState(riversData);
     renderCards(cardState);
     updateLastUpdated();
+    startHeroTips();
   } catch (error) {
     console.error(error);
     showMessage("Could not load river data.");
@@ -158,6 +174,21 @@ function filterCards(query) {
   });
 
   renderCards(filtered);
+}
+
+function startHeroTips() {
+  if (!heroTipText || heroTips.length === 0) return;
+
+  heroTipText.textContent = heroTips[0];
+
+  if (tipIntervalId) {
+    clearInterval(tipIntervalId);
+  }
+
+  tipIntervalId = window.setInterval(() => {
+    currentTipIndex = (currentTipIndex + 1) % heroTips.length;
+    heroTipText.textContent = heroTips[currentTipIndex];
+  }, 3200);
 }
 
 function getGaugeData(site) {
