@@ -94,7 +94,7 @@ input {
 
 .hero {
   position: relative;
-  min-height: 690px;
+  min-height: 640px;
   overflow: hidden;
   color: #fff;
 }
@@ -105,7 +105,7 @@ input {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 34%;
+  object-position: center 28%;
 }
 
 .hero-overlay {
@@ -115,11 +115,10 @@ input {
     linear-gradient(
       180deg,
       rgba(8, 14, 18, 0.18) 0%,
-      rgba(8, 14, 18, 0.12) 18%,
-      rgba(8, 14, 18, 0.14) 42%,
-      rgba(8, 14, 18, 0.10) 65%,
-      rgba(161, 210, 235, 0.18) 82%,
-      rgba(161, 210, 235, 0.42) 100%
+      rgba(8, 14, 18, 0.10) 30%,
+      rgba(8, 14, 18, 0.08) 55%,
+      rgba(160, 210, 235, 0.28) 82%,
+      rgba(160, 210, 235, 0.55) 100%
     );
 }
 
@@ -128,7 +127,7 @@ input {
   z-index: 2;
   max-width: 1360px;
   margin: 0 auto;
-  padding: 26px 28px 0;
+  padding: 34px 28px 0;
 }
 
 .brand {
@@ -137,7 +136,7 @@ input {
   gap: 12px;
   color: rgba(255, 255, 255, 0.96);
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.18rem;
+  font-size: 1.3rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
@@ -147,9 +146,9 @@ input {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  font-size: 1rem;
+  width: 30px;
+  height: 30px;
+  font-size: 1.1rem;
   line-height: 1;
   opacity: 0.96;
 }
@@ -157,56 +156,56 @@ input {
 .hero-inner {
   position: relative;
   z-index: 2;
-  max-width: 1080px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 58px 24px 190px;
+  padding: 90px 24px 170px;
   text-align: center;
 }
 
 .eyebrow {
-  margin: 0 0 20px;
-  font-size: 0.82rem;
+  margin: 0 0 18px;
+  font-size: 0.78rem;
   font-weight: 800;
-  letter-spacing: 0.085em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.96);
+  color: rgba(255, 255, 255, 0.95);
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
 }
 
 .hero h1 {
   margin: 0;
-  font-size: clamp(3.7rem, 5.9vw, 5.2rem);
-  line-height: 0.94;
-  letter-spacing: -0.055em;
+  font-size: clamp(3.2rem, 5.2vw, 4.6rem);
+  line-height: 0.96;
+  letter-spacing: -0.05em;
   font-weight: 800;
   color: #ffffff;
   text-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
 }
 
 .hero-text {
-  margin: 22px auto 0;
-  max-width: 760px;
-  font-size: 1rem;
+  margin: 16px auto 0;
+  max-width: 640px;
+  font-size: 0.98rem;
   line-height: 1.45;
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(255, 255, 255, 0.9);
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
 .hero-search-wrap {
-  margin: 34px auto 0;
-  max-width: 740px;
+  margin: 28px auto 0;
+  max-width: 700px;
 }
 
 .hero-search {
   width: 100%;
-  height: 76px;
-  padding: 0 22px;
-  border: 1px solid rgba(40, 61, 55, 0.08);
-  border-radius: 17px;
+  height: 68px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 14px;
   outline: none;
   background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 12px 22px rgba(15, 28, 24, 0.10);
-  font-size: 1.02rem;
+  box-shadow: 0 10px 20px rgba(15, 28, 24, 0.10);
+  font-size: 1rem;
   color: var(--text);
 }
 
@@ -215,8 +214,8 @@ input {
 }
 
 .last-updated {
-  margin: 14px 0 0;
-  font-size: 0.94rem;
+  margin: 12px 0 0;
+  font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.88);
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
