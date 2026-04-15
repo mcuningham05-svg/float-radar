@@ -55,11 +55,11 @@ body {
   background:
     linear-gradient(
       180deg,
-      #86b7ea 0%,
-      #8fbfec 10%,
-      #97c7e6 24%,
-      #a1d0da 42%,
-      #b8dfdb 68%,
+      #7faee3 0%,
+      #89b8e8 10%,
+      #93c2e8 24%,
+      #9dcddd 42%,
+      #b7dfdc 68%,
       #d5ede2 100%
     );
 }
@@ -90,8 +90,6 @@ input {
   border: 0;
 }
 
-/* HERO */
-
 .hero {
   position: relative;
   min-height: 640px;
@@ -117,11 +115,11 @@ input {
       rgba(8, 14, 18, 0.16) 0%,
       rgba(8, 14, 18, 0.10) 24%,
       rgba(8, 14, 18, 0.06) 50%,
-      rgba(120, 171, 224, 0.10) 66%,
-      rgba(124, 178, 231, 0.34) 77%,
-      rgba(132, 186, 235, 0.68) 87%,
-      rgba(145, 197, 230, 0.94) 95%,
-      rgba(151, 199, 230, 1) 100%
+      rgba(106, 158, 216, 0.14) 66%,
+      rgba(113, 168, 224, 0.40) 77%,
+      rgba(122, 178, 230, 0.76) 87%,
+      rgba(132, 188, 226, 0.96) 95%,
+      rgba(147, 199, 223, 1) 100%
     );
 }
 
@@ -152,7 +150,7 @@ input {
   z-index: 2;
   max-width: 1000px;
   margin: 0 auto;
-  padding: 90px 24px 182px;
+  padding: 90px 24px 194px;
   text-align: center;
 }
 
@@ -214,11 +212,9 @@ input {
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
-/* MAIN */
-
 .app-shell {
   max-width: 1360px;
-  margin: -78px auto 46px;
+  margin: -42px auto 46px;
   padding: 0 18px 0;
   position: relative;
   z-index: 3;
@@ -446,8 +442,6 @@ input {
   color: #2b3a37;
 }
 
-/* DETAIL PAGE */
-
 .detail-page {
   min-height: 100vh;
 }
@@ -672,7 +666,7 @@ input {
   }
 
   .hero-inner {
-    padding: 52px 16px 170px;
+    padding: 52px 16px 176px;
   }
 
   .hero h1 {
@@ -684,7 +678,7 @@ input {
   }
 
   .app-shell {
-    margin: -60px auto 40px;
+    margin: -26px auto 40px;
     padding: 0 16px;
   }
 
@@ -724,7 +718,7 @@ input {
   }
 
   .hero-inner {
-    padding: 46px 16px 138px;
+    padding: 46px 16px 146px;
   }
 
   .hero h1 {
@@ -755,7 +749,7 @@ input {
   }
 
   .app-shell {
-    margin: -46px auto 34px;
+    margin: -12px auto 34px;
   }
 
   .river-grid {
