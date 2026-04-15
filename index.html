@@ -11,27 +11,27 @@
     <img class="hero-image" src="images/hero.jpg" alt="Float Radar hero" />
     <div class="hero-overlay"></div>
 
+    <!-- Top Left Brand ONLY -->
     <div class="hero-topbar">
       <div class="brand">
         <span class="brand-mark">✦</span>
         <span class="brand-text">Float Radar</span>
       </div>
-
-      <nav class="top-nav" aria-label="Primary">
-        <a href="#" class="nav-link">Your Map</a>
-        <button id="refreshBtn" class="nav-button" type="button">Refresh Data</button>
-      </nav>
     </div>
 
     <div class="hero-inner">
-      <p class="eyebrow">Arkansas River Conditions</p>
-      <h1>Find the Best Rivers to Float in Arkansas</h1>
+      <p class="eyebrow">ARKANSAS RIVER CONDITIONS</p>
+
+      <h1>
+        Find the Best Rivers to<br />
+        Float in Arkansas
+      </h1>
+
       <p class="hero-text">
         Quick river conditions for beginner-friendly float planning.
       </p>
 
       <div class="hero-search-wrap">
-        <label class="sr-only" for="riverSearch">Search rivers</label>
         <input
           id="riverSearch"
           class="hero-search"
@@ -41,18 +41,14 @@
         />
       </div>
 
-      <p id="lastUpdated" class="last-updated">Loading latest conditions...</p>
+      <p id="lastUpdated" class="last-updated">Updated just now</p>
     </div>
   </header>
 
   <main class="app-shell">
     <section id="messageBox" class="message-box hidden" aria-live="polite"></section>
 
-    <section class="section-header">
-      <p class="section-kicker">Dashboard</p>
-      <h2>River Sections</h2>
-    </section>
-
+    <!-- NO section header (matches final iteration) -->
     <section id="riverGrid" class="river-grid" aria-live="polite"></section>
   </main>
 
