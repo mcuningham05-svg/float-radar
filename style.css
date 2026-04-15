@@ -55,12 +55,12 @@ body {
   background:
     linear-gradient(
       180deg,
-      #8ebceb 0%,
-      #97c4ee 12%,
-      #9fcdd8 28%,
-      #abd8d7 48%,
-      #c1e5db 74%,
-      #d9efe3 100%
+      #86b7ea 0%,
+      #8fbfec 10%,
+      #97c7e6 24%,
+      #a1d0da 42%,
+      #b8dfdb 68%,
+      #d5ede2 100%
     );
 }
 
@@ -116,12 +116,12 @@ input {
       180deg,
       rgba(8, 14, 18, 0.16) 0%,
       rgba(8, 14, 18, 0.10) 24%,
-      rgba(8, 14, 18, 0.06) 52%,
-      rgba(143, 188, 235, 0.08) 68%,
-      rgba(143, 188, 235, 0.26) 78%,
-      rgba(151, 196, 238, 0.60) 88%,
-      rgba(159, 205, 216, 0.92) 96%,
-      rgba(171, 216, 215, 1) 100%
+      rgba(8, 14, 18, 0.06) 50%,
+      rgba(120, 171, 224, 0.10) 66%,
+      rgba(124, 178, 231, 0.34) 77%,
+      rgba(132, 186, 235, 0.68) 87%,
+      rgba(145, 197, 230, 0.94) 95%,
+      rgba(151, 199, 230, 1) 100%
     );
 }
 
@@ -130,30 +130,21 @@ input {
   z-index: 2;
   max-width: 1360px;
   margin: 0 auto;
-  padding: 34px 28px 0;
+  padding: 32px 28px 0;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  color: rgba(255, 255, 255, 0.96);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.3rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
 }
 
-.brand-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  font-size: 1.1rem;
-  line-height: 1;
-  opacity: 0.96;
+.brand-logo {
+  display: block;
+  width: 252px;
+  height: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.98;
 }
 
 .hero-inner {
@@ -161,7 +152,7 @@ input {
   z-index: 2;
   max-width: 1000px;
   margin: 0 auto;
-  padding: 90px 24px 176px;
+  padding: 90px 24px 182px;
   text-align: center;
 }
 
@@ -227,7 +218,7 @@ input {
 
 .app-shell {
   max-width: 1360px;
-  margin: -108px auto 46px;
+  margin: -78px auto 46px;
   padding: 0 18px 0;
   position: relative;
   z-index: 3;
@@ -676,8 +667,12 @@ input {
     padding: 18px 16px 0;
   }
 
+  .brand-logo {
+    width: 200px;
+  }
+
   .hero-inner {
-    padding: 52px 16px 160px;
+    padding: 52px 16px 170px;
   }
 
   .hero h1 {
@@ -689,7 +684,7 @@ input {
   }
 
   .app-shell {
-    margin: -92px auto 40px;
+    margin: -60px auto 40px;
     padding: 0 16px;
   }
 
@@ -729,7 +724,7 @@ input {
   }
 
   .hero-inner {
-    padding: 46px 16px 132px;
+    padding: 46px 16px 138px;
   }
 
   .hero h1 {
@@ -755,12 +750,12 @@ input {
     font-size: 0.88rem;
   }
 
-  .brand {
-    font-size: 1.02rem;
+  .brand-logo {
+    width: 164px;
   }
 
   .app-shell {
-    margin: -76px auto 34px;
+    margin: -46px auto 34px;
   }
 
   .river-grid {
