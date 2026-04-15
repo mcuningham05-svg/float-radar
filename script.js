@@ -11,6 +11,7 @@ let weatherCache = new Map();
 
 async function loadApp() {
   showMessage("");
+
   try {
     const response = await fetch("rivers.json", { cache: "no-store" });
     if (!response.ok) {
@@ -123,8 +124,6 @@ function openDetailPage(index) {
 }
 
 async function refreshData() {
-  refreshBtn.disabled = true;
-  refreshBtn.textContent = "Refreshing...";
   clearCaches();
 
   try {
@@ -136,9 +135,6 @@ async function refreshData() {
   } catch (error) {
     console.error(error);
     showMessage("Refresh failed.");
-  } finally {
-    refreshBtn.disabled = false;
-    refreshBtn.textContent = "Refresh Data";
   }
 }
 
@@ -376,10 +372,14 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-riverSearch.addEventListener("input", (event) => {
-  filterCards(event.target.value);
-});
+if (riverSearch) {
+  riverSearch.addEventListener("input", (event) => {
+    filterCards(event.target.value);
+  });
+}
 
-refreshBtn.addEventListener("click", refreshData);
+if (refreshBtn) {
+  refreshBtn.addEventListener("click", refreshData);
+}
 
 loadApp();
