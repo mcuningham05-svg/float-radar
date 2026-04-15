@@ -18,7 +18,10 @@ const heroTips = [
   "Tell someone your float plan.",
   "Wear sunscreen.",
   "Watch for strainers and downed trees.",
-  "Bring a dry bag for your phone and keys."
+  "Bring a dry bag for your phone and keys.",
+  "Don’t forget to stretch.",
+  "Eat nutritious foods.",
+  "Be kind."
 ];
 
 let currentTipIndex = 0;
@@ -188,7 +191,7 @@ function startHeroTips() {
   tipIntervalId = window.setInterval(() => {
     currentTipIndex = (currentTipIndex + 1) % heroTips.length;
     heroTipText.textContent = heroTips[currentTipIndex];
-  }, 3200);
+  }, 6400);
 }
 
 function getGaugeData(site) {
