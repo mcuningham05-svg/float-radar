@@ -55,12 +55,12 @@ body {
   background:
     linear-gradient(
       180deg,
-      #88b8ef 0%,
-      #93c3f0 16%,
-      #9ccccf 34%,
-      #afd9d4 56%,
-      #c4e7da 78%,
-      #d8efe2 100%
+      #8ebceb 0%,
+      #97c4ee 12%,
+      #9fcdd8 28%,
+      #abd8d7 48%,
+      #c1e5db 74%,
+      #d9efe3 100%
     );
 }
 
@@ -114,11 +114,14 @@ input {
   background:
     linear-gradient(
       180deg,
-      rgba(8, 14, 18, 0.18) 0%,
-      rgba(8, 14, 18, 0.10) 30%,
-      rgba(8, 14, 18, 0.08) 55%,
-      rgba(160, 210, 235, 0.28) 82%,
-      rgba(160, 210, 235, 0.55) 100%
+      rgba(8, 14, 18, 0.16) 0%,
+      rgba(8, 14, 18, 0.10) 24%,
+      rgba(8, 14, 18, 0.06) 52%,
+      rgba(143, 188, 235, 0.08) 68%,
+      rgba(143, 188, 235, 0.26) 78%,
+      rgba(151, 196, 238, 0.60) 88%,
+      rgba(159, 205, 216, 0.92) 96%,
+      rgba(171, 216, 215, 1) 100%
     );
 }
 
@@ -158,7 +161,7 @@ input {
   z-index: 2;
   max-width: 1000px;
   margin: 0 auto;
-  padding: 90px 24px 170px;
+  padding: 90px 24px 176px;
   text-align: center;
 }
 
@@ -224,7 +227,7 @@ input {
 
 .app-shell {
   max-width: 1360px;
-  margin: -128px auto 46px;
+  margin: -108px auto 46px;
   padding: 0 18px 0;
   position: relative;
   z-index: 3;
@@ -674,7 +677,7 @@ input {
   }
 
   .hero-inner {
-    padding: 52px 16px 150px;
+    padding: 52px 16px 160px;
   }
 
   .hero h1 {
@@ -686,7 +689,7 @@ input {
   }
 
   .app-shell {
-    margin: -104px auto 40px;
+    margin: -92px auto 40px;
     padding: 0 16px;
   }
 
@@ -726,7 +729,7 @@ input {
   }
 
   .hero-inner {
-    padding: 46px 16px 124px;
+    padding: 46px 16px 132px;
   }
 
   .hero h1 {
@@ -757,7 +760,7 @@ input {
   }
 
   .app-shell {
-    margin: -88px auto 34px;
+    margin: -76px auto 34px;
   }
 
   .river-grid {
