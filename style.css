@@ -122,30 +122,31 @@ input {
 }
 
 .hero-topbar {
-  position: relative;
-  z-index: 2;
-  max-width: 1360px;
-  margin: 0 auto;
-  padding: 32px 28px 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  padding: 34px 64px 0;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 24px;
+  pointer-events: none;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
   flex: 0 0 auto;
-  transform: translateX(-68px);
+  transform: none;
 }
 
 .brand-logo {
   display: block;
-  width: 252px;
+  width: 230px;
   height: auto;
   object-fit: contain;
-  mix-blend-mode: multiply;
 }
 
 .hero-tip-box {
@@ -159,6 +160,7 @@ input {
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 10px 24px rgba(10, 20, 18, 0.08);
   text-align: left;
+  pointer-events: auto;
 }
 
 .hero-tip-label {
@@ -183,7 +185,7 @@ input {
   z-index: 2;
   max-width: 1000px;
   margin: 0 auto;
-  padding: 90px 24px 194px;
+  padding: 215px 24px 194px;
   text-align: center;
 }
 
@@ -687,6 +689,10 @@ input {
   .hero-tip-box {
     width: 220px;
   }
+
+  .brand-logo {
+    width: 210px;
+  }
 }
 
 @media (max-width: 860px) {
@@ -695,16 +701,16 @@ input {
   }
 
   .hero-topbar {
-    padding: 18px 16px 0;
+    padding: 22px 22px 0;
     gap: 16px;
   }
 
   .brand {
-    transform: translateX(-26px);
+    transform: none;
   }
 
   .brand-logo {
-    width: 200px;
+    width: 190px;
   }
 
   .hero-tip-box {
@@ -718,7 +724,7 @@ input {
   }
 
   .hero-inner {
-    padding: 52px 16px 176px;
+    padding: 170px 16px 176px;
   }
 
   .hero h1 {
@@ -774,7 +780,8 @@ input {
   }
 
   .hero-topbar {
-    flex-direction: column;
+    padding: 16px 16px 0;
+    flex-direction: row;
     align-items: flex-start;
   }
 
@@ -782,8 +789,28 @@ input {
     transform: none;
   }
 
+  .brand-logo {
+    width: 132px;
+  }
+
+  .hero-tip-box {
+    width: 176px;
+    min-height: 0;
+    padding: 10px 12px;
+  }
+
+  .hero-tip-label {
+    margin-bottom: 6px;
+    font-size: 0.64rem;
+  }
+
+  .hero-tip-text {
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+
   .hero-inner {
-    padding: 46px 16px 146px;
+    padding: 150px 16px 146px;
   }
 
   .hero h1 {
@@ -808,16 +835,6 @@ input {
 
   .last-updated {
     font-size: 0.88rem;
-  }
-
-  .brand-logo {
-    width: 164px;
-  }
-
-  .hero-tip-box {
-    width: 100%;
-    max-width: 240px;
-    min-height: 0;
   }
 
   .app-shell {
