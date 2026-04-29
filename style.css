@@ -124,8 +124,7 @@ input {
 .hero-topbar {
   position: relative;
   z-index: 2;
-  max-width: 1360px;
-  margin: 0 auto;
+  width: 100%;
   padding: 32px 28px 0;
   display: flex;
   justify-content: space-between;
@@ -137,7 +136,7 @@ input {
   display: inline-flex;
   align-items: center;
   flex: 0 0 auto;
-  transform: translateX(-68px);
+  transform: none;
 }
 
 .brand-logo {
@@ -700,7 +699,7 @@ input {
   }
 
   .brand {
-    transform: translateX(-26px);
+    transform: none;
   }
 
   .brand-logo {
