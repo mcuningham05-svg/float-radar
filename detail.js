@@ -15,14 +15,15 @@ async function loadDetailPage() {
   showMessage("");
 
   try {
+    // NEW: read river slug instead of index
     const params = new URLSearchParams(window.location.search);
-    const rawIndex = params.get("i");
-    const index = Number.parseInt(rawIndex, 10);
+    const riverSlug = params.get("river");
 
-    if (!Number.isInteger(index) || index < 0) {
-      throw new Error("Invalid river index");
+    if (!riverSlug) {
+      throw new Error("Missing river slug");
     }
 
+    // Load grouped rivers.json
     const response = await fetch("rivers.json", { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`Failed to load rivers.json (${response.status})`);
@@ -33,35 +34,52 @@ async function loadDetailPage() {
       throw new Error("rivers.json is not a valid array");
     }
 
-    const river = rivers[index];
+    // Find river by slug
+    const river = rivers.find(r => r.slug === riverSlug);
     if (!river) {
       throw new Error("River not found");
     }
 
+    // For detail page: show ALL sections, but default to the FIRST section
+    const section = river.sections[0];
+    if (!section) {
+      throw new Error("River has no sections");
+    }
+
+    // Fetch gauge + weather for this section
     const [gauge, weather] = await Promise.all([
-      getGaugeData(river.site),
-      getWeatherData(river.lat, river.lon)
+      getGaugeData(section.site),
+      getWeatherData(section.lat, section.lon)
     ]);
 
-    const status = getStatus(gauge.level, river.idealMin, river.idealMax);
+    const status = getStatus(gauge.level, section.idealMin, section.idealMax);
 
-    detailTitle.textContent = river.section;
+    // Fill UI
+    detailTitle.textContent = river.river;
     detailRiver.textContent = river.river;
-    detailSectionName.textContent = river.section;
+    detailSectionName.textContent = section.name;
+
     detailLevel.textContent = formatLevel(gauge.level);
     detailFlow.textContent = formatFlow(gauge.flow);
     detailWaterTemp.textContent = formatTemp(gauge.waterTemp);
     detailAirTemp.textContent = formatTemp(weather.airTemp);
+
     detailCondition.textContent = `${status.emoji} ${status.text}`;
-    detailRange.textContent = `Ideal range: ${formatRange(river.idealMin, river.idealMax)}`;
-    detailNotes.textContent = river.notes || "";
-    detailUsgsLink.href = getUsgsSiteUrl(river.site);
+    detailRange.textContent = `Ideal range: ${formatRange(section.idealMin, section.idealMax)}`;
+    detailNotes.textContent = section.notes || "";
+
+    detailUsgsLink.href = getUsgsSiteUrl(section.site);
+
   } catch (error) {
     console.error(error);
     detailTitle.textContent = "River Report";
     showMessage("Could not load this river report.");
   }
 }
+
+/* ---------------------------------------------------------
+   GAUGE + WEATHER FETCHING
+--------------------------------------------------------- */
 
 function getGaugeData(site) {
   if (!site) {
@@ -71,7 +89,6 @@ function getGaugeData(site) {
       waterTemp: null
     });
   }
-
   return fetchGaugeData(site);
 }
 
@@ -82,15 +99,16 @@ function getWeatherData(lat, lon) {
       code: null
     });
   }
-
   return fetchWeatherData(lat, lon);
 }
 
 async function fetchGaugeData(site) {
   try {
-    const url = `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${encodeURIComponent(site)}&parameterCd=00065,00060,00010&siteStatus=all`;
-    const response = await fetch(url);
+    const url =
+      `https://waterservices.usgs.gov/nwis/iv/?format=json&sites=${encodeURIComponent(site)}` +
+      `&parameterCd=00065,00060,00010&siteStatus=all`;
 
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`USGS request failed (${response.status})`);
     }
@@ -112,93 +130,10 @@ async function fetchGaugeData(site) {
 
       if (!Number.isFinite(numericValue)) continue;
 
-      if (variableCode === "00065") {
-        level = numericValue;
-      } else if (variableCode === "00060") {
-        flow = numericValue;
-      } else if (variableCode === "00010") {
-        waterTempC = numericValue;
-      }
+      if (variableCode === "00065") level = numericValue;
+      else if (variableCode === "00060") flow = numericValue;
+      else if (variableCode === "00010") waterTempC = numericValue;
     }
 
     return {
-      level,
-      flow,
-      waterTemp: waterTempC !== null ? cToF(waterTempC) : null
-    };
-  } catch (error) {
-    console.error(`Gauge fetch failed for ${site}:`, error);
-    return {
-      level: null,
-      flow: null,
-      waterTemp: null
-    };
-  }
-}
-
-async function fetchWeatherData(lat, lon) {
-  try {
-    const url =
-      `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}` +
-      `&longitude=${encodeURIComponent(lon)}` +
-      `&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=auto`;
-
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(`Weather request failed (${response.status})`);
-    }
-
-    const data = await response.json();
-
-    return {
-      airTemp: Number.isFinite(data?.current?.temperature_2m) ? data.current.temperature_2m : null,
-      code: data?.current?.weather_code ?? null
-    };
-  } catch (error) {
-    console.error(`Weather fetch failed for ${lat}, ${lon}:`, error);
-    return {
-      airTemp: null,
-      code: null
-    };
-  }
-}
-
-function formatLevel(level) {
-  return level !== null ? `${level.toFixed(1)} ft` : "--";
-}
-
-function formatFlow(flow) {
-  return flow !== null ? `${Math.round(flow)} cfs` : "--";
-}
-
-function formatTemp(temp) {
-  return temp !== null ? `${Math.round(temp)}°F` : "--";
-}
-
-function formatRange(min, max) {
-  const minText = Number.isFinite(min) ? min.toFixed(1) : "--";
-  const maxText = Number.isFinite(max) ? max.toFixed(1) : "--";
-  return `${minText}–${maxText} ft`;
-}
-
-function getUsgsSiteUrl(site) {
-  return `https://waterdata.usgs.gov/monitoring-location/${encodeURIComponent(site)}/`;
-}
-
-function cToF(celsius) {
-  return (celsius * 9) / 5 + 32;
-}
-
-function showMessage(message) {
-  if (!message) {
-    messageBox.textContent = "";
-    messageBox.classList.add("hidden");
-    return;
-  }
-
-  messageBox.textContent = message;
-  messageBox.classList.remove("hidden");
-}
-
-loadDetailPage();
+      level
